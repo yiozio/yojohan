@@ -1,2 +1,28 @@
+@font-face {
+  font-family:"PixelMPlus";font-style:normal;font-weight:normal;
+  src: url('PixelMplus12-Regular.ttf') format('truetype');
+}
+body {
+  background-color: #EEE;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='40' height='40' viewBox='0 0 1 1'%3E%3Crect x='0' y='0' width='.5' height='.5' fill='%23CCC'/%3E%3Crect x='.5' y='.5' width='.5' height='.5' fill='%23CCC'/%3E%3C/svg%3E");
+  font-family: 'PixelMPlus';
+  font-size: 12px;
+  line-height: 12px;
+  color: #000;
+  overflow: hidden;
+}
+input[type=number]::-webkit-inner-spin-button,
+input[type=number]::-webkit-outer-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
 .main {width: 100%; height: 100%; position: relative;}
-.preview {position: absolute; left: 0; top: 0; width: 100vmin; height: 100vmin; background: #90A500}
+.header {position: relative; width: 100vw; height: 35px; line-height: 35px; color: #AAA; opacity: 0.9; background: #FFF; text-align: right;}
+.header::before {content: '四畳半シミュレータ'; position: absolute; left: 0; top: 0; width: 100%; height: 35px; text-align: center; color: #000; transform: scale(1.3); pointer-events: none;}
+.header > input[type=number] {width: 18px; color: #AAA; border: solid 1px #ddd}
+.preview {position: absolute; left: 0; top: 35px; width: calc(100vmin - 35px); height: calc(100vmin - 35px); background: #90A500}
+
+@media (orientation: portrait) {
+  .preview {width: 100vmin; height: 100vmin}
+}
