@@ -27,7 +27,13 @@ function Item({ item }: ItemProps) {
         }}
       >
         <rect fill={color} width={width} height={height} rotate={rotateDeg + 'deg'} />
-        <text x="0" y={height / 2} fill="#FFF">
+        <text
+          x={width / 2}
+          y={height / 2}
+          text-anchor="middle"
+          dominant-baseline="central"
+          fill="#FFF"
+        >
           {item.name}
         </text>
       </g>
