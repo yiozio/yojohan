@@ -4,17 +4,9 @@ import { observable } from 'mobx';
 import { observer } from 'mobx-react';
 import Tatami from './Tatami';
 import TatamiPattern from './TatamiPattern';
-import Items from './Item';
+import Item, { ItemAttrs } from './Item';
 
-export const items = observable<{
-  name: string;
-  color: string;
-  x: number;
-  y: number;
-  width: number;
-  height: number;
-  rotateDeg: number;
-}>([]);
+export const items = observable<ItemAttrs>([]);
 
 export default observer(Preview);
 function Preview() {
@@ -35,7 +27,7 @@ function Preview() {
       <Tatami x={0} y={0.5} type="Vert" />
       <g>
         {items.map((_, i) => (
-          <Items key={i} index={i} />
+          <Item key={i} item={items[i]} />
         ))}
       </g>
     </svg>

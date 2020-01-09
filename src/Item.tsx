@@ -1,13 +1,22 @@
 import * as React from 'react';
-import { items } from './Preview';
 import { observer } from 'mobx-react';
 
+export interface ItemAttrs {
+  name: string;
+  color: string;
+  x: number;
+  y: number;
+  width: number;
+  height: number;
+  rotateDeg: number;
+}
+
 interface ItemProps {
-  index: number;
+  item: ItemAttrs;
 }
 export default observer(Item);
-function Item({ index }: ItemProps) {
-  const { color, x, y, width, height, rotateDeg } = items[index];
+function Item({ item }: ItemProps) {
+  const { color, x, y, width, height, rotateDeg } = item;
   return (
     <rect
       className="tatami"
