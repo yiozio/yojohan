@@ -6,8 +6,6 @@ import { tatamiSize } from './Header';
 export interface ItemAttrs {
   name: string;
   color: string;
-  x: number;
-  y: number;
   width: number;
   height: number;
   rotateDeg: number;
@@ -18,23 +16,21 @@ interface ItemProps {
 }
 export default observer(Item);
 function Item({ item }: ItemProps) {
-  const { color, x, y, width, height, rotateDeg } = item;
+  const { color, width, height, rotateDeg } = item;
   const [rate, setRate] = React.useState<number | null>(null);
   return (
     <Draggable scale={rate ? rate : undefined}>
-      <rect
-        className="tatami"
-        fill={color}
-        x={x}
-        y={y}
+      <g
         ref={dom => {
           if (!dom || !dom.parentElement || !dom.parentElement.parentElement) return;
           setRate(dom.parentElement.parentElement.clientWidth / (tatamiSize.get() * 1.5));
         }}
-        width={width}
-        height={height}
-        rotate={rotateDeg + 'deg'}
-      />
+      >
+        <rect fill={color} width={width} height={height} rotate={rotateDeg + 'deg'} />
+        <text x="0" y={height / 2} fill="#FFF">
+          {item.name}
+        </text>
+      </g>
     </Draggable>
   );
 }

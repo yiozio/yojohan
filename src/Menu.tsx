@@ -37,8 +37,6 @@ function Menu() {
             items.push({
               name: '',
               color: colors[items.length % colors.length],
-              x: 10 * items.length,
-              y: 10 * items.length,
               width: 30,
               height: 50,
               rotateDeg: 0
