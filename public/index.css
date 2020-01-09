@@ -4,7 +4,7 @@
 }
 body {font-family: 'PixelMPlus';font-size: 12px;line-height: 12px;color: #000;overflow: hidden;}
 input[type=number]::-webkit-inner-spin-button, input[type=number]::-webkit-outer-spin-button {-webkit-appearance: none; margin: 0;}
-.button {width: 100%; height: 40px; line-height: 40px; text-align: center; background: #FFF; color: #000; box-shadow: 3px 3px 0 0 #00000055, 0 0 0 1px inset #00000022;}
+.button {width: 100%; height: 40px; line-height: 40px; text-align: center; background: #FFF; color: #000; box-shadow: 3px 3px 0 0 #00000055, inset 0 0 0 1px #00000022;}
 .button:hover {filter: brightness(0.9)}
 .button:focus, .button:active {filter: brightness(0.9); box-shadow: 1px 1px 0 0 #00000080; transform: translateY(1px)}
 
@@ -12,8 +12,8 @@ input[type=number]::-webkit-inner-spin-button, input[type=number]::-webkit-outer
 .header {position: relative; width: 100vw; height: 35px; line-height: 35px; color: #AAA; opacity: 0.9; background: #FFF; text-align: right;}
 .header::before {content: '四畳半シミュレータ'; position: absolute; left: 0; top: 0; width: 100%; height: 35px; text-align: center; color: #000; transform: scale(1.3); pointer-events: none;}
 .header > input[type=number] {width: 18px; color: #AAA; border: solid 1px #ddd}
-.preview {position: absolute; left: 0; top: 35px; width: calc(100vmin - 35px); height: calc(100vmin - 35px); background: #90A500}
-.menu {position: absolute; right: 0; bottom: 0; width: calc(100vw - 100vmin + 35px); min-width: 300px; height: calc(100vmin - 35px); background: #FFF}
+.preview {position: absolute; left: 0; top: 35px; width: calc(100vmin - 100px); height: calc(100vmin - 100px); background: #90A500}
+.menu {position: absolute; right: 0; top: 35px; width: calc(100vw - 100vmin + 100px); min-width: 300px; height: calc(100vmin - 100px); background: #FFF}
 .menu > .button, .menu > .buttons {position: absolute; left: 10px; top: 5px; width: calc(100% - 20px);}
 .menu > .buttons {display: flex; flex-flow: row nowrap;}
 .menu > .buttons > .button {flex: 1 1 auto; margin: 0 5px;}
@@ -22,7 +22,7 @@ input[type=number]::-webkit-inner-spin-button, input[type=number]::-webkit-outer
 .list > div {display: flex; flex-flow: row wrap; justify-content: center; margin: 5px 0}
 .list > div > svg {flex: 0 0 auto; width: 80px; height: 80px; padding: 3px; margin: 2px; background: #FFF;}
 .list > div > svg:hover {filter: brightness(0.9)}
-.list > div > svg.select {box-shadow: 0 0 0 3px inset #00000022;}
+.list > div > svg.select {box-shadow: inset 0 0 0 3px #00000022;}
 .list > div > svg > rect {x: 0; y: 0;}
 .list > div > .formatter {width: 80px; height: 0; padding-left: 3px; padding-right: 3px; margin-left: 2px; margin-right: 2px}
 .modal {position: fixed;left: 0;top: 0;width: 100%;height: 100%;background: #00000030; display: flex; justify-content: center; align-items: center;}
@@ -33,8 +33,8 @@ input[type=number]::-webkit-inner-spin-button, input[type=number]::-webkit-outer
 .modal > div > div:nth-child(4) > span {width: 35px; height: 35px; flex: 0 0 auto;}
 
 @media (orientation: portrait) {
-  .preview {width: 100vmin; height: 100vmin}
-  .menu {width: 100vmin; height: calc(100% - 100vmin - 35px); min-height: 140px;}
+  .preview {width: 100vw; height: 100vw}
+  .menu {top: auto; bottom: 0; width: 100vw; height: calc(100% - 100vw - 35px); min-height: 140px;}
   .menu > .button, .menu > .buttons {top: auto; bottom: 5px;}
   .list {top: 0; overflow-x: scroll; overflow-y: hidden; margin: 0}
   .list > div {flex-flow: row nowrap; justify-content: flex-start;}
