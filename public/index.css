@@ -16,14 +16,17 @@ input[type=number]::-webkit-inner-spin-button, input[type=number]::-webkit-outer
 .menu {position: absolute; right: 0; bottom: 0; width: calc(100vw - 100vmin + 35px); min-width: 300px; height: calc(100vmin - 35px); background: #FFF}
 .menu > .button {position: absolute; left: 10px; top: 5px; width: calc(100% - 20px);}
 .list {position: absolute; left: 0; top: 55px; width: 100%; height: calc(100% - 55px); overflow-x: hidden; overflow-y: scroll; margin: 0}
-.list > div {display: flex; flex-flow: row wrap; margin: 5px 0}
-.list > div > svg {flex: 0 0 auto; width: 80px; height: 80px; margin: 5px}
+.list > div {display: flex; flex-flow: row wrap; justify-content: center; margin: 5px 0}
+.list > div > svg {flex: 0 0 auto; width: 80px; height: 80px; padding: 3px; margin: 2px; background: #FFF;}
+.list > div > svg:hover {filter: brightness(0.9)}
 .list > div > svg > rect {x: 0; y: 0;}
+.list > div > .formatter {width: 80px; height: 0; padding-left: 3px; padding-right: 3px; margin-left: 2px; margin-right: 2px}
 
 @media (orientation: portrait) {
   .preview {width: 100vmin; height: 100vmin}
   .menu {width: 100vmin; height: calc(100% - 100vmin - 35px); min-height: 140px;}
   .menu > .button {top: auto; bottom: 5px;}
   .list {top: 0; overflow-x: scroll; overflow-y: hidden; margin: 0}
-  .list > div {flex-flow: row nowrap;}
+  .list > div {flex-flow: row nowrap; justify-content: flex-start;}
+  .list > div > .formatter {width: 0; padding: 0; margin: 0;}
 }

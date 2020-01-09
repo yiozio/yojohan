@@ -20,6 +20,9 @@ function Menu() {
               {<Item index={i} />}
             </svg>
           ))}
+          {Array.from(Array(20)).map((_, i) => (
+            <div key={'f' + i} className="formatter" />
+          ))}
         </div>
       </div>
       <div
