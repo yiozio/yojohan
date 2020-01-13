@@ -1,6 +1,6 @@
 @font-face {
   font-family:"PixelMPlus";font-style:normal;font-weight:normal;
-  src: url('PixelMplus12-Regular.ttf') format('truetype');
+  src: url('/PixelMplus12-Regular.ttf') format('truetype');
 }
 body {font-family: 'PixelMPlus';font-size: 12px;line-height: 12px;color: #000;overflow: hidden;}
 input[type=number]::-webkit-inner-spin-button, input[type=number]::-webkit-outer-spin-button {-webkit-appearance: none; margin: 0;}
