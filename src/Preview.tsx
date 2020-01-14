@@ -34,7 +34,7 @@ function Preview() {
       <Tatami x={0} y={0.5} type="Vert" />
       <g>
         {items.map((_, i) => (
-          <Item key={i} item={items[i]} />
+          <Item key={i} item={items[i]} draggable />
         ))}
       </g>
     </svg>
