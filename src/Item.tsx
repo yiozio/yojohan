@@ -37,7 +37,7 @@ function Item({ item, draggable }: ItemProps) {
         width={width - 1}
         height={height - 1}
         rotate={rotateDeg + 'deg'}
-        stroke-width="1"
+        strokeWidth="1"
         stroke="#FFF"
       />
       <text x={width / 2} y={height / 2} textAnchor="middle" dominantBaseline="central" fill="#FFF">
@@ -50,18 +50,28 @@ function Item({ item, draggable }: ItemProps) {
     <Draggable
       scale={rate ? rate : undefined}
       position={{ x, y }}
-      onStart={e => {
-        pos.current = { x: 0, y: 0 };
+      onStart={(e: any) => {
+        if (e.touches) {
+          pos.current = { x: e.touches[0].clientX, y: e.touches[0].clientY };
+        } else {
+          pos.current = { x: 0, y: 0 };
+        }
       }}
       onDrag={(e: any) => {
-        if (!pos.current) return;
+        if (!pos.current || e.touches) return;
         pos.current.x += e.movementX;
         pos.current.y += e.movementY;
       }}
       onStop={(e: any) => {
         if (pos.current === null || rate === null) return;
-        item.x = Math.round(item.x + pos.current.x / rate);
-        item.y = Math.round(item.y + pos.current.y / rate);
+        const move = e.touches
+          ? {
+              x: e.changedTouches[0].clientX - pos.current.x,
+              y: e.changedTouches[0].clientY - pos.current.y
+            }
+          : pos.current;
+        item.x = Math.round(item.x + move.x / rate);
+        item.y = Math.round(item.y + move.y / rate);
         pos.current = null;
       }}
       children={element}
