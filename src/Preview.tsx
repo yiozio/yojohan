@@ -1,12 +1,19 @@
 import * as React from 'react';
 import { tatamiSize } from './Header';
-import { observable } from 'mobx';
+import { observable, autorun } from 'mobx';
 import { observer } from 'mobx-react';
 import Tatami from './Tatami';
 import TatamiPattern from './TatamiPattern';
 import Item, { ItemAttrs } from './Item';
 
-export const items = observable<ItemAttrs>([]);
+const itemsJson = decodeURIComponent(location.search.substr(6));
+export const items = observable<ItemAttrs>(itemsJson ? JSON.parse(itemsJson) : []);
+
+autorun(() => {
+  const json = JSON.stringify(items.toJS());
+  const newUrl = './?json=' + encodeURIComponent(json);
+  window.history.pushState(null, '', newUrl);
+});
 
 export default observer(Preview);
 function Preview() {

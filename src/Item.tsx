@@ -6,6 +6,8 @@ import { tatamiSize } from './Header';
 export interface ItemAttrs {
   name: string;
   color: string;
+  x: number;
+  y: number;
   width: number;
   height: number;
   rotateDeg: number;
@@ -16,11 +18,30 @@ interface ItemProps {
 }
 export default observer(Item);
 function Item({ item }: ItemProps) {
-  const { color, width, height, rotateDeg } = item;
+  const { color, x, y, width, height, rotateDeg } = item;
   const [rate, setRate] = React.useState<number | null>(null);
+  const pos = React.useRef<{ x: number; y: number } | null>(null);
   return (
-    <Draggable scale={rate ? rate : undefined}>
+    <Draggable
+      scale={rate ? rate : undefined}
+      defaultPosition={{ x, y }}
+      onStart={e => {
+        pos.current = { x: 0, y: 0 };
+      }}
+      onDrag={(e: any) => {
+        if (!pos.current) return;
+        pos.current.x += e.movementX;
+        pos.current.y += e.movementY;
+      }}
+      onStop={(e: any) => {
+        if (pos.current === null || rate === null) return;
+        item.x = Math.round(item.x + pos.current.x / rate);
+        item.y = Math.round(item.y + pos.current.y / rate);
+        pos.current = null;
+      }}
+    >
       <g
+        className="item"
         ref={dom => {
           if (!dom || !dom.parentElement || !dom.parentElement.parentElement) return;
           setRate(dom.parentElement.parentElement.clientWidth / (tatamiSize.get() * 1.5));
@@ -30,8 +51,8 @@ function Item({ item }: ItemProps) {
         <text
           x={width / 2}
           y={height / 2}
-          text-anchor="middle"
-          dominant-baseline="central"
+          textAnchor="middle"
+          dominantBaseline="central"
           fill="#FFF"
         >
           {item.name}

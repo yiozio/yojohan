@@ -18,6 +18,7 @@ input[type=number]::-webkit-inner-spin-button, input[type=number]::-webkit-outer
 .menu > .buttons {display: flex; flex-flow: row nowrap;}
 .menu > .buttons > .button {flex: 1 1 auto; margin: 0 5px;}
 .menu > .buttons > .button:last-child {background: #FF0000; color: #FFF;}
+.menu svg > .item {transform: none}
 .list {position: absolute; left: 0; top: 55px; width: 100%; height: calc(100% - 55px); overflow-x: hidden; overflow-y: scroll; margin: 0}
 .list > div {display: flex; flex-flow: row wrap; justify-content: center; margin: 5px 0}
 .list > div > svg {flex: 0 0 auto; width: 80px; height: 80px; padding: 3px; margin: 2px; background: #FFF;}
