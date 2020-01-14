@@ -35,7 +35,7 @@ function Menu() {
           className="button"
           onClick={() => {
             items.push({
-              name: 'テーブル ',
+              name: 'テーブル',
               color: colors[items.length % colors.length],
               x: 0,
               y: 0,
