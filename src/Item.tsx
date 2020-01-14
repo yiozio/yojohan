@@ -24,7 +24,7 @@ function Item({ item }: ItemProps) {
   return (
     <Draggable
       scale={rate ? rate : undefined}
-      defaultPosition={{ x, y }}
+      position={{ x, y }}
       onStart={e => {
         pos.current = { x: 0, y: 0 };
       }}
