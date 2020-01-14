@@ -47,7 +47,16 @@ function Item({ item }: ItemProps) {
           setRate(dom.parentElement.parentElement.clientWidth / (tatamiSize.get() * 1.5));
         }}
       >
-        <rect fill={color} width={width} height={height} rotate={rotateDeg + 'deg'} />
+        <rect
+          fill={color}
+          x=".5"
+          y=".5"
+          width={width - 1}
+          height={height - 1}
+          rotate={rotateDeg + 'deg'}
+          stroke-width="1"
+          stroke="#FFF"
+        />
         <text
           x={width / 2}
           y={height / 2}
