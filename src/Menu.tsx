@@ -75,6 +75,9 @@ function Menu() {
           >
             編集
           </div>
+          <div className="button" onClick={() => items.push({ ...items[index] })}>
+            コピー
+          </div>
           <div
             className="button"
             onClick={() => {
