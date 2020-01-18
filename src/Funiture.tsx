@@ -3,7 +3,7 @@ import { observer } from 'mobx-react';
 import Draggable from 'react-draggable';
 import { tatamiSize } from './Header';
 
-export interface ItemAttrs {
+export interface FunitureAttrs {
   name: string;
   color: string;
   x: number;
@@ -13,18 +13,17 @@ export interface ItemAttrs {
   rotateDeg: number;
 }
 
-interface ItemProps {
-  item: ItemAttrs;
+interface FunitureProps {
+  item: FunitureAttrs;
   draggable?: boolean;
 }
-export default observer(Item);
-function Item({ item, draggable }: ItemProps) {
+export default observer(Funiture);
+function Funiture({ item, draggable }: FunitureProps) {
   const { color, x, y, width, height, rotateDeg } = item;
   const [rate, setRate] = React.useState<number | null>(null);
   const pos = React.useRef<{ x: number; y: number } | null>(null);
   const element = (
     <g
-      className="item"
       ref={dom => {
         if (!dom || !dom.parentElement || !dom.parentElement.parentElement) return;
         setRate(dom.parentElement.parentElement.clientWidth / (tatamiSize.get() * 1.5));

@@ -18,7 +18,6 @@ function Tatami({ x, y, type }: TatamiProps) {
   const adjust = strokeWidth + space;
   return (
     <rect
-      className="tatami"
       fill={`url(#${type === 'Hori' ? pattern['H'] : pattern['V']})`}
       strokeWidth={strokeWidth}
       stroke="#A1B603"
