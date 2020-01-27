@@ -1,9 +1,9 @@
 import * as React from 'react';
 import { observer } from 'mobx-react';
 import styled from 'styled-components';
-import { FunitureAttrs } from './Funiture';
 import Input from './Input';
 import Button from './Button';
+import { items, save } from './Preview';
 
 const Component = styled.div({
   position: 'fixed',
@@ -34,7 +34,15 @@ const Component = styled.div({
 
 export const colors = ['#076572', '#008496', '#09AA91', '#44C876', '#CCE574'];
 export default observer(FunitureEdit);
-function FunitureEdit({ item, onClosed }: { item: FunitureAttrs; onClosed: () => void }) {
+function FunitureEdit({
+  funitureIndex,
+  onClosed
+}: {
+  funitureIndex: number;
+  onClosed: () => void;
+}) {
+  const item = items[funitureIndex];
+
   return (
     <Component>
       <div>
@@ -97,7 +105,14 @@ function FunitureEdit({ item, onClosed }: { item: FunitureAttrs; onClosed: () =>
             onClick={() => (item.color = colors[4])}
           />
         </div>
-        <Button onClick={() => onClosed()}>決定</Button>
+        <Button
+          onClick={() => {
+            save();
+            onClosed();
+          }}
+        >
+          決定
+        </Button>
       </div>
     </Component>
   );

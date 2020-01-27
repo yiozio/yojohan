@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { observer } from 'mobx-react';
 import styled from 'styled-components';
-import { items } from './Preview';
+import { items, save } from './Preview';
 import Funiture from './Funiture';
 import Button from './Button';
 import FunitureEdit, { colors } from './FunitureEdit';
@@ -116,7 +116,7 @@ function Menu() {
               style={index === i ? { boxShadow: 'inset 0 0 0 3px #00000022' } : undefined}
               onClick={() => select(index === i ? null : i)}
             >
-              {<Funiture item={items[i]} />}
+              {<Funiture funitureIndex={i} />}
             </Svg>
           ))}
           {Array.from(Array(20)).map((_, i) => (
@@ -144,7 +144,7 @@ function Menu() {
                     select(null);
                     setModal(null);
                   }}
-                  item={items[items.length - 1]}
+                  funitureIndex={items.length - 1}
                 />
               );
             }}
@@ -161,7 +161,7 @@ function Menu() {
                       select(null);
                       setModal(null);
                     }}
-                    item={items[index]}
+                    funitureIndex={index}
                   />
                 )
               }
@@ -174,6 +174,7 @@ function Menu() {
               onClick={() => {
                 items.remove(items[index]);
                 select(null);
+                save();
               }}
             >
               削除

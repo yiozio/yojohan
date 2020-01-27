@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { observer } from 'mobx-react';
-import Draggable from 'react-draggable';
 import { tatamiSize } from './Header';
+import { items, save } from './Preview';
 
 export interface FunitureAttrs {
   name: string;
@@ -13,69 +13,81 @@ export interface FunitureAttrs {
   rotateDeg: number;
 }
 
-interface FunitureProps {
-  item: FunitureAttrs;
+type Props = {
+  funitureIndex: number;
   draggable?: boolean;
-}
-export default observer(Funiture);
-function Funiture({ item, draggable }: FunitureProps) {
-  const { color, x, y, width, height, rotateDeg } = item;
-  const [rate, setRate] = React.useState<number | null>(null);
-  const pos = React.useRef<{ x: number; y: number } | null>(null);
-  const element = (
-    <g
-      ref={dom => {
-        if (!dom || !dom.parentElement || !dom.parentElement.parentElement) return;
-        setRate(dom.parentElement.parentElement.clientWidth / (tatamiSize.get() * 1.5));
-      }}
-    >
-      <rect
-        fill={color}
-        x=".5"
-        y=".5"
-        width={width - 1}
-        height={height - 1}
-        rotate={rotateDeg + 'deg'}
-        strokeWidth="1"
-        stroke="#FFF"
-      />
-      <text x={width / 2} y={height / 2} textAnchor="middle" dominantBaseline="central" fill="#FFF">
-        {item.name}
-      </text>
-    </g>
-  );
+};
+type DOMProps = FunitureAttrs & {
+  dragStart?: (e: React.MouseEvent | React.TouchEvent) => void;
+};
 
-  return draggable ? (
-    <Draggable
-      scale={rate ? rate : undefined}
-      position={{ x, y }}
-      onStart={(e: any) => {
-        if (e.touches) {
-          pos.current = { x: e.touches[0].clientX, y: e.touches[0].clientY };
-        } else {
-          pos.current = { x: 0, y: 0 };
-        }
-      }}
-      onDrag={(e: any) => {
-        if (!pos.current || e.touches) return;
-        pos.current.x += e.movementX;
-        pos.current.y += e.movementY;
-      }}
-      onStop={(e: any) => {
-        if (pos.current === null || rate === null) return;
-        const move = e.touches
-          ? {
-              x: e.changedTouches[0].clientX - pos.current.x,
-              y: e.changedTouches[0].clientY - pos.current.y
-            }
-          : pos.current;
-        item.x = Math.round(item.x + move.x / rate);
-        item.y = Math.round(item.y + move.y / rate);
-        pos.current = null;
-      }}
-      children={element}
+function getPos(e: MouseEvent | TouchEvent) {
+  const { clientX, clientY } = (e as TouchEvent).touches
+    ? (e as TouchEvent).touches[0]
+    : (e as MouseEvent);
+  return { clientX, clientY };
+}
+const DOM = ({ color, width, x, y, height, rotateDeg, name, dragStart }: DOMProps) => (
+  <g
+    onMouseDownCapture={dragStart}
+    onTouchStartCapture={dragStart}
+    transform={`translate(${x},${y})`}
+  >
+    <rect
+      fill={color}
+      x=".5"
+      y=".5"
+      width={width - 1}
+      height={height - 1}
+      strokeWidth="1"
+      stroke="#FFF"
     />
-  ) : (
-    element
-  );
+    <text x={width / 2} y={height / 2} textAnchor="middle" dominantBaseline="central" fill="#FFF">
+      {name}
+    </text>
+  </g>
+);
+
+export default observer(Funiture);
+function Funiture({ funitureIndex, draggable }: Props) {
+  const item = items[funitureIndex];
+
+  const dragStart = draggable
+    ? (e: React.TouchEvent | React.MouseEvent) => {
+        const element = e.currentTarget as Element;
+        const svgBase = element.parentElement?.parentElement as Element;
+
+        // ブラウザ上のサイズ(px)とSVGのサイズの比率
+        const rate = svgBase.clientWidth / (tatamiSize.get() * 1.5);
+
+        const { clientX: startX, clientY: startY } = getPos(e.nativeEvent);
+        const { x, y } = item;
+
+        const move = (e: MouseEvent | TouchEvent) => {
+          const { clientX, clientY } = getPos(e);
+          item.x = x - Math.round((startX - clientX) / rate);
+          item.y = y - Math.round((startY - clientY) / rate);
+        };
+
+        if ((e as React.TouchEvent).touches) {
+          element.addEventListener('touchmove', move);
+          const end = () => {
+            element.removeEventListener('touchmove', move);
+            element.removeEventListener('touchend', end);
+            save();
+          };
+          element.addEventListener('touchend', end);
+        } else {
+          document.addEventListener('mousemove', move);
+          const end = () => {
+            document.removeEventListener('mousemove', move);
+            document.removeEventListener('mouseup', end);
+            save();
+          };
+          document.addEventListener('mouseup', end);
+        }
+      }
+    : undefined;
+
+  return <DOM {...item} dragStart={dragStart} />;
 }

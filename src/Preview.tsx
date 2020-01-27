@@ -1,7 +1,7 @@
 import * as React from 'react';
 import styled from 'styled-components';
 import { tatamiSize } from './Header';
-import { observable, autorun } from 'mobx';
+import { observable } from 'mobx';
 import { observer } from 'mobx-react';
 import Tatami from './Tatami';
 import TatamiPattern from './TatamiPattern';
@@ -10,11 +10,11 @@ import Funiture, { FunitureAttrs } from './Funiture';
 const itemsJson = decodeURIComponent(location.search.substr(6));
 export const items = observable<FunitureAttrs>(itemsJson ? JSON.parse(itemsJson) : []);
 
-autorun(() => {
+export const save = () => {
   const json = JSON.stringify(items.toJS());
   const newUrl = './?json=' + encodeURIComponent(json);
   window.history.pushState(null, '', newUrl);
-});
+};
 
 const Component = styled.svg({
   position: 'absolute',
@@ -52,7 +52,7 @@ function Preview() {
       <Tatami x={0} y={0.5} type="Vert" />
       <g>
         {items.map((_, i) => (
-          <Funiture key={i} item={items[i]} draggable />
+          <Funiture key={i} funitureIndex={i} draggable />
         ))}
       </g>
     </Component>
