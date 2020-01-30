@@ -1,12 +1,12 @@
 import * as React from 'react';
 import { observer } from 'mobx-react';
 import styled from 'styled-components';
-import { items, save } from './Preview';
 import Button from './Button';
-import FunitureEdit, { colors } from './FunitureEdit';
-import FunitureList, { selectedIndex } from './FunitureList';
-import { FunitureAttrs } from './Funiture';
+import FunitureEdit from './FunitureEdit';
+import FunitureList from './FunitureList';
 import Buttons, { className as buttonsClass } from './Buttons';
+import { FunitureAttrs, funitureColors } from '../defs';
+import { funitures, save, selectedIndex } from '../stores/funitures';
 
 type DOMProps = {
   className?: string;
@@ -27,7 +27,7 @@ const DOM = (p: DOMProps) => (
         <Button
           onClick={() => {
             p.addItem();
-            p.setModal(<FunitureEdit onClosed={p.reset} funitureIndex={items.length - 1} />);
+            p.setModal(<FunitureEdit onClosed={p.reset} funitureIndex={funitures.length - 1} />);
           }}
         >
           ＋家具追加
@@ -42,11 +42,13 @@ const DOM = (p: DOMProps) => (
         >
           編集
         </Button>
-        <Button onClick={() => items.push({ ...items[p.selectedIndex || 0] })}>コピー</Button>
+        <Button onClick={() => funitures.push({ ...funitures[p.selectedIndex || 0] })}>
+          コピー
+        </Button>
         <Button
           buttonColor="danger"
           onClick={() => {
-            items.remove(items[p.selectedIndex || 0]);
+            funitures.remove(funitures[p.selectedIndex || 0]);
             p.reset();
           }}
         >
@@ -106,12 +108,12 @@ function Menu() {
         setModal(undefined);
         save();
       }}
-      items={items}
+      items={funitures}
       addItem={(item?: FunitureAttrs) =>
-        items.push(
+        funitures.push(
           item || {
             name: 'テーブル',
-            color: colors[items.length % colors.length],
+            color: funitureColors[funitures.length % funitureColors.length],
             x: 0,
             y: 0,
             width: 155,
@@ -120,7 +122,7 @@ function Menu() {
           }
         )
       }
-      removeItem={() => items.remove(items[selectedIndex.get() || 0])}
+      removeItem={() => funitures.remove(funitures[selectedIndex.get() || 0])}
     />
   );
 }

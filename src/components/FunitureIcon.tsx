@@ -1,8 +1,8 @@
 import * as React from 'react';
 import { observer } from 'mobx-react';
 import styled from 'styled-components';
-import { items } from './Preview';
 import Funiture from './Funiture';
+import { funitures } from '../stores/funitures';
 
 type Props = {
   funitureIndex: number;
@@ -46,7 +46,7 @@ const Styled = styled(DOM)({
 
 export default observer(Menu);
 function Menu(p: Props) {
-  const item = items[p.funitureIndex];
+  const item = funitures[p.funitureIndex];
 
   return (
     <Styled

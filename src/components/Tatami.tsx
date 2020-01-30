@@ -1,13 +1,7 @@
 import * as React from 'react';
 import { tatamiSize } from './Header';
 import { observer } from 'mobx-react';
-import { pattern } from './TatamiPattern';
-
-/** 畳縁の長さ(cm) */
-const strokeWidth = 2.8;
-/** 畳間の長さ(cm) */
-const space = 0.5;
-const adjust = strokeWidth + space;
+import { tatamiPattern } from '../defs';
 
 type Props = {
   x: number;
@@ -17,9 +11,14 @@ type Props = {
 type DOMProps = Props & {
   className?: string;
   tatamiSize: number;
-  pattern: typeof pattern;
+  pattern: typeof tatamiPattern;
 };
 
+/** 畳縁の長さ(cm) */
+const strokeWidth = 2.8;
+/** 畳間の長さ(cm) */
+const space = 0.5;
+const adjust = strokeWidth + space;
 const DOM = (p: DOMProps) => (
   <rect
     fill={`url(#${p.type === 'Hori' ? p.pattern['H'] : p.pattern['V']})`}
@@ -36,5 +35,5 @@ const Styled = DOM;
 
 export default observer(Tatami);
 function Tatami(p: Props) {
-  return <Styled tatamiSize={tatamiSize.get()} pattern={pattern} {...p} />;
+  return <Styled tatamiSize={tatamiSize.get()} pattern={tatamiPattern} {...p} />;
 }

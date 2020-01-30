@@ -1,20 +1,12 @@
 import * as React from 'react';
 import styled from 'styled-components';
 import { tatamiSize } from './Header';
-import { observable } from 'mobx';
 import { observer } from 'mobx-react';
 import Tatami from './Tatami';
 import TatamiPattern from './TatamiPattern';
-import Funiture, { FunitureAttrs } from './Funiture';
-
-const itemsJson = decodeURIComponent(location.search.substr(6));
-export const items = observable<FunitureAttrs>(itemsJson ? JSON.parse(itemsJson) : []);
-
-export const save = () => {
-  const json = JSON.stringify(items.toJS());
-  const newUrl = './?json=' + encodeURIComponent(json);
-  window.history.pushState(null, '', newUrl);
-};
+import Funiture from './Funiture';
+import { FunitureAttrs } from '../defs';
+import { funitures } from '../stores/funitures';
 
 type DOMProps = {
   className?: string;
@@ -64,5 +56,5 @@ const Styled = styled(DOM)({
 
 export default observer(Preview);
 function Preview() {
-  return <Styled tatamiSize={tatamiSize.get()} items={items.map(a => a)} />;
+  return <Styled tatamiSize={tatamiSize.get()} items={funitures.map(a => a)} />;
 }

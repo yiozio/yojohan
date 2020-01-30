@@ -1,12 +1,9 @@
 import * as React from 'react';
-import { observable } from 'mobx';
 import { observer } from 'mobx-react';
 import styled from 'styled-components';
-import { FunitureAttrs } from './Funiture';
-import { items } from './Preview';
 import FunitureIcon from './FunitureIcon';
-
-export const selectedIndex = observable.box<number | undefined>();
+import { FunitureAttrs } from '../defs';
+import { funitures, selectedIndex } from '../stores/funitures';
 
 type DOMProps = {
   className?: string;
@@ -61,7 +58,7 @@ export default observer(Menu);
 function Menu() {
   return (
     <Styled
-      items={items.map(a => a)}
+      items={funitures.map(a => a)}
       index={selectedIndex.get()}
       setIndex={index => selectedIndex.set(index)}
     />

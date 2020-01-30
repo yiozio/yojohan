@@ -2,17 +2,8 @@ import * as React from 'react';
 import styled from 'styled-components';
 import { observer } from 'mobx-react';
 import { tatamiSize } from './Header';
-import { items, save } from './Preview';
-
-export interface FunitureAttrs {
-  name: string;
-  color: string;
-  x: number;
-  y: number;
-  width: number;
-  height: number;
-  rotateDeg: number;
-}
+import { FunitureAttrs } from '../defs';
+import { funitures, save } from '../stores/funitures';
 
 type Props = {
   funitureIndex: number;
@@ -49,7 +40,7 @@ const Styled = styled(DOM)({});
 
 export default observer(Funiture);
 function Funiture({ funitureIndex, draggable }: Props) {
-  const item = items[funitureIndex];
+  const item = funitures[funitureIndex];
   const getPos = (e: MouseEvent | TouchEvent) => {
     const { clientX, clientY } = (e as TouchEvent).touches
       ? (e as TouchEvent).touches[0]

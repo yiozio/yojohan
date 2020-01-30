@@ -3,11 +3,8 @@ import { observer } from 'mobx-react';
 import styled from 'styled-components';
 import Input from './Input';
 import Button from './Button';
-import { items, save } from './Preview';
-import { FunitureAttrs } from './Funiture';
-
-/** 家具の取り得る配色一覧 */
-export const colors = ['#076572', '#008496', '#09AA91', '#44C876', '#CCE574'];
+import { funitures, save } from '../stores/funitures';
+import { FunitureAttrs, funitureColors } from '../defs';
 
 type Props = {
   funitureIndex?: number;
@@ -50,7 +47,7 @@ const DOM = ({ className, item, setItem, onClosed }: DOMProps) => (
         cm
       </div>
       <div>
-        {colors.map((color, i) => (
+        {funitureColors.map((color, i) => (
           <span
             key={i}
             style={{
@@ -104,8 +101,8 @@ export default observer(FunitureEdit);
 function FunitureEdit({ funitureIndex, onClosed }: Props) {
   return (
     <Styled
-      item={items[funitureIndex || items.length - 1]}
-      setItem={item => (items[funitureIndex || items.length - 1] = item)}
+      item={funitures[funitureIndex || funitures.length - 1]}
+      setItem={item => (funitures[funitureIndex || funitures.length - 1] = item)}
       onClosed={onClosed}
     />
   );
