@@ -1,4 +1,5 @@
 import * as React from 'react';
+import styled from 'styled-components';
 import { observer } from 'mobx-react';
 import { tatamiSize } from './Header';
 import { items, save } from './Preview';
@@ -18,17 +19,13 @@ type Props = {
   draggable?: boolean;
 };
 type DOMProps = FunitureAttrs & {
+  className?: string;
   dragStart?: (e: React.MouseEvent | React.TouchEvent) => void;
 };
 
-function getPos(e: MouseEvent | TouchEvent) {
-  const { clientX, clientY } = (e as TouchEvent).touches
-    ? (e as TouchEvent).touches[0]
-    : (e as MouseEvent);
-  return { clientX, clientY };
-}
-const DOM = ({ color, width, x, y, height, rotateDeg, name, dragStart }: DOMProps) => (
+const DOM = ({ className, color, width, x, y, height, rotateDeg, name, dragStart }: DOMProps) => (
   <g
+    className={className}
     onMouseDownCapture={dragStart}
     onTouchStartCapture={dragStart}
     transform={`translate(${x},${y})`}
@@ -48,9 +45,17 @@ const DOM = ({ color, width, x, y, height, rotateDeg, name, dragStart }: DOMProp
   </g>
 );
 
+const Styled = styled(DOM)({});
+
 export default observer(Funiture);
 function Funiture({ funitureIndex, draggable }: Props) {
   const item = items[funitureIndex];
+  const getPos = (e: MouseEvent | TouchEvent) => {
+    const { clientX, clientY } = (e as TouchEvent).touches
+      ? (e as TouchEvent).touches[0]
+      : (e as MouseEvent);
+    return { clientX, clientY };
+  };
 
   const dragStart = draggable
     ? (e: React.TouchEvent | React.MouseEvent) => {
@@ -70,24 +75,24 @@ function Funiture({ funitureIndex, draggable }: Props) {
         };
 
         if ((e as React.TouchEvent).touches) {
-          element.addEventListener('touchmove', move);
+          element.addEventListener('touchmove', move, { passive: true });
           const end = () => {
             element.removeEventListener('touchmove', move);
             element.removeEventListener('touchend', end);
             save();
           };
-          element.addEventListener('touchend', end);
+          element.addEventListener('touchend', end, { passive: true });
         } else {
-          document.addEventListener('mousemove', move);
+          document.addEventListener('mousemove', move, { passive: true });
           const end = () => {
             document.removeEventListener('mousemove', move);
             document.removeEventListener('mouseup', end);
             save();
           };
-          document.addEventListener('mouseup', end);
+          document.addEventListener('mouseup', end, { passive: true });
         }
       }
     : undefined;
 
-  return <DOM {...item} dragStart={dragStart} />;
+  return <Styled {...item} dragStart={dragStart} />;
 }

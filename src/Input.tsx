@@ -1,6 +1,12 @@
 import styled from 'styled-components';
+import * as React from 'react';
 
-export default styled.input({
+type Props = React.ComponentPropsWithRef<'input'>;
+type DOMProps = Props;
+
+const DOM = (p: DOMProps) => <input {...p} />;
+
+const Styled = styled(DOM)({
   '&[type="number"]': {
     '&::-webkit-inner-spin-button, &::-webkit-outer-spin-button': {
       margin: 0,
@@ -8,3 +14,7 @@ export default styled.input({
     }
   }
 });
+
+export default function Input(p: Props) {
+  return <Styled {...p} />;
+}

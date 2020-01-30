@@ -4,8 +4,76 @@ import styled from 'styled-components';
 import Input from './Input';
 import Button from './Button';
 import { items, save } from './Preview';
+import { FunitureAttrs } from './Funiture';
 
-const Component = styled.div({
+/** 家具の取り得る配色一覧 */
+export const colors = ['#076572', '#008496', '#09AA91', '#44C876', '#CCE574'];
+
+type Props = {
+  funitureIndex?: number;
+  onClosed: () => void;
+};
+type DOMProps = {
+  className?: string;
+  item: FunitureAttrs;
+  setItem: (item: FunitureAttrs) => void;
+  onClosed: () => void;
+};
+
+const DOM = ({ className, item, setItem, onClosed }: DOMProps) => (
+  <div className={className}>
+    <div>
+      <div>
+        名称:
+        <Input
+          type="text"
+          value={item.name}
+          onChange={e => setItem({ ...item, name: e.target.value })}
+        />
+      </div>
+      <div>
+        奥行:
+        <Input
+          type="number"
+          value={item.height}
+          onChange={e => setItem({ ...item, height: Number(e.target.value) })}
+        />
+        cm
+      </div>
+      <div>
+        幅:&nbsp;&nbsp;
+        <Input
+          type="number"
+          value={item.width}
+          onChange={e => setItem({ ...item, width: Number(e.target.value) })}
+        />
+        cm
+      </div>
+      <div>
+        {colors.map((color, i) => (
+          <span
+            key={i}
+            style={{
+              background: color,
+              boxShadow: item.color === color ? '0 0 0 2px inset #00000030' : ''
+            }}
+            onClick={() => setItem({ ...item, color })}
+          />
+        ))}
+      </div>
+      <Button
+        onClick={() => {
+          save();
+          onClosed();
+        }}
+      >
+        決定
+      </Button>
+    </div>
+  </div>
+);
+
+const Styled = styled(DOM)({
   position: 'fixed',
   left: 0,
   top: 0,
@@ -32,88 +100,13 @@ const Component = styled.div({
   '& > div > div:nth-child(4) > span': { width: '35px', height: '35px', flex: '0 0 auto' }
 });
 
-export const colors = ['#076572', '#008496', '#09AA91', '#44C876', '#CCE574'];
 export default observer(FunitureEdit);
-function FunitureEdit({
-  funitureIndex,
-  onClosed
-}: {
-  funitureIndex: number;
-  onClosed: () => void;
-}) {
-  const item = items[funitureIndex];
-
+function FunitureEdit({ funitureIndex, onClosed }: Props) {
   return (
-    <Component>
-      <div>
-        <div>
-          名称:
-          <Input type="text" value={item.name} onChange={e => (item.name = e.target.value)} />
-        </div>
-        <div>
-          奥行:
-          <Input
-            type="number"
-            value={item.height}
-            onChange={e => (item.height = Number(e.target.value))}
-          />
-          cm
-        </div>
-        <div>
-          幅:&nbsp;&nbsp;
-          <Input
-            type="number"
-            value={item.width}
-            onChange={e => (item.width = Number(e.target.value))}
-          />
-          cm
-        </div>
-        <div>
-          <span
-            style={{
-              background: colors[0],
-              boxShadow: item.color === colors[0] ? '0 0 0 2px inset #00000030' : ''
-            }}
-            onClick={() => (item.color = colors[0])}
-          />
-          <span
-            style={{
-              background: colors[1],
-              boxShadow: item.color === colors[1] ? '0 0 0 2px inset #00000030' : ''
-            }}
-            onClick={() => (item.color = colors[1])}
-          />
-          <span
-            style={{
-              background: colors[2],
-              boxShadow: item.color === colors[2] ? '0 0 0 2px inset #00000030' : ''
-            }}
-            onClick={() => (item.color = colors[2])}
-          />
-          <span
-            style={{
-              background: colors[3],
-              boxShadow: item.color === colors[3] ? '0 0 0 2px inset #00000030' : ''
-            }}
-            onClick={() => (item.color = colors[3])}
-          />
-          <span
-            style={{
-              background: colors[4],
-              boxShadow: item.color === colors[4] ? '0 0 0 2px inset #00000030' : ''
-            }}
-            onClick={() => (item.color = colors[4])}
-          />
-        </div>
-        <Button
-          onClick={() => {
-            save();
-            onClosed();
-          }}
-        >
-          決定
-        </Button>
-      </div>
-    </Component>
+    <Styled
+      item={items[funitureIndex || items.length - 1]}
+      setItem={item => (items[funitureIndex || items.length - 1] = item)}
+      onClosed={onClosed}
+    />
   );
 }

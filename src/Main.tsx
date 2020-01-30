@@ -20,19 +20,25 @@ const GlobalStyle = createGlobalStyle({
   }
 });
 
-const Component = styled.div({
+type DOMProps = {
+  className?: string;
+};
+
+const DOM = ({ className }: DOMProps) => (
+  <div className={className}>
+    <GlobalStyle />
+    <Header />
+    <Preview />
+    <Menu />
+  </div>
+);
+
+const Styled = styled(DOM)({
   width: '100%',
   height: '100%',
   position: 'relative'
 });
 
 export default function Main() {
-  return (
-    <Component>
-      <GlobalStyle />
-      <Header />
-      <Preview />
-      <Menu />
-    </Component>
-  );
+  return <Styled />;
 }

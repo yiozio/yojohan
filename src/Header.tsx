@@ -7,7 +7,21 @@ import Input from './Input';
 /** 畳の長辺の長さ(cm) */
 export const tatamiSize = observable.box(88 * 2);
 
-const Component = styled.div({
+type DOMProps = {
+  className?: string;
+  tatamiSize: number;
+  setTatamiSize: (size: number) => void;
+};
+
+const DOM = ({ className, tatamiSize, setTatamiSize }: DOMProps) => (
+  <div className={className}>
+    畳サイズ:
+    <Input type="number" value={tatamiSize} onChange={v => setTatamiSize(Number(v.target.value))} />
+    cm
+  </div>
+);
+
+const Styled = styled(DOM)({
   position: 'relative',
   width: '100vw',
   height: '35px',
@@ -38,15 +52,5 @@ const Component = styled.div({
 
 export default observer(Header);
 function Header() {
-  return (
-    <Component>
-      畳サイズ:
-      <Input
-        type="number"
-        value={tatamiSize.get()}
-        onChange={v => tatamiSize.set(Number(v.target.value))}
-      />
-      cm
-    </Component>
-  );
+  return <Styled tatamiSize={tatamiSize.get()} setTatamiSize={size => tatamiSize.set(size)} />;
 }

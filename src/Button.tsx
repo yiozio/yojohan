@@ -1,10 +1,18 @@
+import * as React from 'react';
 import styled from 'styled-components';
 
-interface Props {
+type Props = {
+  onClick: () => void;
   buttonColor?: 'danger';
-}
+  children?: string;
+};
+type DOMProps = Props & {
+  className?: string;
+};
 
-export default styled.div<Props>(
+const DOM = (props: DOMProps) => <div {...props} />;
+
+const Styled = styled(DOM)(
   {
     width: '100%',
     height: '40px',
@@ -23,6 +31,10 @@ export default styled.div<Props>(
       transform: 'translateY(1px)'
     }
   },
-  ({ buttonColor }: Props) => (buttonColor === 'danger' ? { background: '#f00' } : undefined),
-  ({ buttonColor }: Props) => (buttonColor ? { color: '#fee' } : undefined)
+  p => (p.buttonColor === 'danger' ? { background: '#f00' } : undefined),
+  p => (p.buttonColor ? { color: '#fee' } : undefined)
 );
+
+export default function Button(p: Props) {
+  return <Styled {...p} />;
+}

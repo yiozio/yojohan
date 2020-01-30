@@ -16,7 +16,35 @@ export const save = () => {
   window.history.pushState(null, '', newUrl);
 };
 
-const Component = styled.svg({
+type DOMProps = {
+  className?: string;
+  tatamiSize: number;
+  items: FunitureAttrs[];
+};
+
+const DOM = (p: DOMProps) => (
+  <svg
+    className={p.className}
+    viewBox={`0 0 ${p.tatamiSize * 1.5} ${p.tatamiSize * 1.5}`}
+    version="1.1"
+    xmlns="http://www.w3.org/2000/svg"
+    xmlnsXlink="http://www.w3.org/1999/xlink"
+  >
+    <TatamiPattern />
+    <Tatami x={0.5} y={0.5} type="Half" />
+    <Tatami x={0} y={0} type="Hori" />
+    <Tatami x={1} y={0} type="Vert" />
+    <Tatami x={0.5} y={1} type="Hori" />
+    <Tatami x={0} y={0.5} type="Vert" />
+    <g>
+      {p.items.map((_, i) => (
+        <Funiture key={i} funitureIndex={i} draggable />
+      ))}
+    </g>
+  </svg>
+);
+
+const Styled = styled(DOM)({
   position: 'absolute',
   left: 0,
   top: '35px',
@@ -36,25 +64,5 @@ const Component = styled.svg({
 
 export default observer(Preview);
 function Preview() {
-  const tatamiLongerSide = tatamiSize.get();
-  return (
-    <Component
-      viewBox={`0 0 ${tatamiLongerSide * 1.5} ${tatamiLongerSide * 1.5}`}
-      version="1.1"
-      xmlns="http://www.w3.org/2000/svg"
-      xmlnsXlink="http://www.w3.org/1999/xlink"
-    >
-      <TatamiPattern />
-      <Tatami x={0.5} y={0.5} type="Half" />
-      <Tatami x={0} y={0} type="Hori" />
-      <Tatami x={1} y={0} type="Vert" />
-      <Tatami x={0.5} y={1} type="Hori" />
-      <Tatami x={0} y={0.5} type="Vert" />
-      <g>
-        {items.map((_, i) => (
-          <Funiture key={i} funitureIndex={i} draggable />
-        ))}
-      </g>
-    </Component>
-  );
+  return <Styled tatamiSize={tatamiSize.get()} items={items.map(a => a)} />;
 }
