@@ -46,7 +46,7 @@ const DOM = (p: DOMProps) => (
           コピー
         </Button>
         <Button
-          buttonColor="danger"
+          buttoncolor="danger"
           onClick={() => {
             funitures.remove(funitures[p.selectedIndex || 0]);
             p.reset();

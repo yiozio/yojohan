@@ -3,7 +3,7 @@ import styled from 'styled-components';
 
 type Props = {
   onClick: () => void;
-  buttonColor?: 'danger';
+  buttoncolor?: 'danger';
   children?: string;
 };
 type DOMProps = Props & {
@@ -31,9 +31,11 @@ const Styled = styled(DOM)(
       transform: 'translateY(1px)'
     }
   },
-  p => (p.buttonColor === 'danger' ? { background: '#f00' } : undefined),
-  p => (p.buttonColor ? { color: '#fee' } : undefined)
+  p => (p.buttoncolor === 'danger' ? { background: '#f00' } : undefined),
+  p => (p.buttoncolor ? { color: '#fee' } : undefined)
 );
+
+export const base = Styled;
 
 export default function Button(p: Props) {
   return <Styled {...p} />;
