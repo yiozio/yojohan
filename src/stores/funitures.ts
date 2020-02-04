@@ -6,11 +6,19 @@ export const tatamiSize = observable.box(88 * 2);
 
 export const selectedIndex = observable.box<number | undefined>();
 
-const funituresJson = decodeURIComponent(location.search.substr(6));
-export const funitures = observable<FunitureAttrs>(funituresJson ? JSON.parse(funituresJson) : []);
+const funituresJson = (location.search.match(/(?<=json=)[^&]*/) || [])[0];
+export const funitures = observable<FunitureAttrs>(
+  funituresJson !== undefined ? JSON.parse(decodeURIComponent(funituresJson)) : []
+);
 
 export const save = () => {
-  const json = JSON.stringify(funitures.toJS());
-  const newUrl = './?json=' + encodeURIComponent(json);
-  window.history.pushState(null, '', newUrl);
+  const json = encodeURIComponent(JSON.stringify(funitures.toJS()));
+  const oldSearch = location.search;
+  const newSearch =
+    oldSearch.length === 0
+      ? `?json=${json}`
+      : oldSearch.match(/json=/)
+      ? oldSearch.replace(/(?<=json=)[^&]*/, json)
+      : oldSearch + `&json=${json}`;
+  window.history.pushState(null, '', './' + newSearch);
 };
