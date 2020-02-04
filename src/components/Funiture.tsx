@@ -1,9 +1,8 @@
 import * as React from 'react';
 import styled from 'styled-components';
 import { observer } from 'mobx-react';
-import { tatamiSize } from './Header';
 import { FunitureAttrs } from '../defs';
-import { funitures, save } from '../stores/funitures';
+import { funitures, save, tatamiSize } from '../stores/funitures';
 
 type Props = {
   funitureIndex: number;
@@ -38,9 +37,45 @@ const DOM = ({ className, color, width, x, y, height, rotateDeg, name, dragStart
 
 const Styled = styled(DOM)({});
 
+export const base = Styled;
+
 export default observer(Funiture);
 function Funiture({ funitureIndex, draggable }: Props) {
   const item = funitures[funitureIndex];
+
+  return (
+    <Styled
+      {...item}
+      dragStart={
+        draggable
+          ? e =>
+              dragStart(
+                e,
+                tatamiSize.get(),
+                item.x,
+                item.y,
+                x => (item.x = x),
+                y => (item.y = y),
+                save
+              )
+          : undefined
+      }
+    />
+  );
+}
+
+function dragStart(
+  e: React.TouchEvent | React.MouseEvent,
+  tatamiSize: number,
+  x: number,
+  y: number,
+  setX: (x: number) => void,
+  setY: (y: number) => void,
+  save?: () => void
+) {
+  const element = e.currentTarget as Element;
+  const svgBase = element.parentElement?.parentElement as Element;
+
   const getPos = (e: MouseEvent | TouchEvent) => {
     const { clientX, clientY } = (e as TouchEvent).touches
       ? (e as TouchEvent).touches[0]
@@ -48,42 +83,32 @@ function Funiture({ funitureIndex, draggable }: Props) {
     return { clientX, clientY };
   };
 
-  const dragStart = draggable
-    ? (e: React.TouchEvent | React.MouseEvent) => {
-        const element = e.currentTarget as Element;
-        const svgBase = element.parentElement?.parentElement as Element;
+  // ブラウザ上のサイズ(px)とSVGのサイズの比率
+  const rate = svgBase.clientWidth / (tatamiSize * 1.5);
 
-        // ブラウザ上のサイズ(px)とSVGのサイズの比率
-        const rate = svgBase.clientWidth / (tatamiSize.get() * 1.5);
+  const { clientX: startX, clientY: startY } = getPos(e.nativeEvent);
 
-        const { clientX: startX, clientY: startY } = getPos(e.nativeEvent);
-        const { x, y } = item;
+  function move(e: MouseEvent | TouchEvent) {
+    const { clientX, clientY } = getPos(e);
+    setX(x - Math.round((startX - clientX) / rate));
+    setY(y - Math.round((startY - clientY) / rate));
+  }
 
-        const move = (e: MouseEvent | TouchEvent) => {
-          const { clientX, clientY } = getPos(e);
-          item.x = x - Math.round((startX - clientX) / rate);
-          item.y = y - Math.round((startY - clientY) / rate);
-        };
-
-        if ((e as React.TouchEvent).touches) {
-          element.addEventListener('touchmove', move, { passive: true });
-          const end = () => {
-            element.removeEventListener('touchmove', move);
-            element.removeEventListener('touchend', end);
-            save();
-          };
-          element.addEventListener('touchend', end, { passive: true });
-        } else {
-          document.addEventListener('mousemove', move, { passive: true });
-          const end = () => {
-            document.removeEventListener('mousemove', move);
-            document.removeEventListener('mouseup', end);
-            save();
-          };
-          document.addEventListener('mouseup', end, { passive: true });
-        }
-      }
-    : undefined;
-
-  return <Styled {...item} dragStart={dragStart} />;
+  if ((e as React.TouchEvent).touches) {
+    element.addEventListener('touchmove', move, { passive: true });
+    const end = () => {
+      element.removeEventListener('touchmove', move);
+      element.removeEventListener('touchend', end);
+      save && save();
+    };
+    element.addEventListener('touchend', end, { passive: true });
+  } else {
+    document.addEventListener('mousemove', move, { passive: true });
+    const end = () => {
+      document.removeEventListener('mousemove', move);
+      document.removeEventListener('mouseup', end);
+      save && save();
+    };
+    document.addEventListener('mouseup', end, { passive: true });
+  }
 }

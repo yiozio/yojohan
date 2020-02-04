@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { tatamiSize } from './Header';
+import { tatamiSize } from '../stores/funitures';
 import { observer } from 'mobx-react';
 import { tatamiPattern } from '../defs';
 
