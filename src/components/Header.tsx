@@ -1,11 +1,8 @@
 import * as React from 'react';
-import { observable } from 'mobx';
 import { observer } from 'mobx-react';
 import styled from 'styled-components';
+import { tatamiSize } from '../stores/funitures';
 import Input from './Input';
-
-/** 畳の長辺の長さ(cm) */
-export const tatamiSize = observable.box(88 * 2);
 
 type DOMProps = {
   className?: string;

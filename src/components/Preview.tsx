@@ -1,12 +1,11 @@
 import * as React from 'react';
 import styled from 'styled-components';
-import { tatamiSize } from './Header';
 import { observer } from 'mobx-react';
 import Tatami from './Tatami';
 import TatamiPattern from './TatamiPattern';
 import Funiture from './Funiture';
 import { FunitureAttrs } from '../defs';
-import { funitures } from '../stores/funitures';
+import { funitures, tatamiSize } from '../stores/funitures';
 
 type DOMProps = {
   className?: string;
