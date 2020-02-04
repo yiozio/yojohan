@@ -35,8 +35,6 @@ const Styled = styled(DOM)(
   p => (p.buttoncolor ? { color: '#fee' } : undefined)
 );
 
-export const base = Styled;
-
 export default function Button(p: Props) {
   return <Styled {...p} />;
 }

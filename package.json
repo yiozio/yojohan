@@ -7,7 +7,7 @@
     "build:prod": "rimraf public/dist && webpack --mode 'production'",
     "lint:unit": "tslint -c tslint.json",
     "lint:all": "tslint -c tslint.json \"src/**/*.ts?(x)\"",
-    "storybook": "start-storybook -p 6006 -s public",
+    "storybook": "start-storybook -p 6006 -s public --ci",
     "build-storybook": "build-storybook"
   },
   "devDependencies": {
@@ -16,7 +16,6 @@
     "@storybook/addon-info": "^5.3.10",
     "@storybook/addon-knobs": "^5.3.10",
     "@storybook/addon-links": "^5.3.10",
-    "@storybook/addon-storysource": "^5.3.10",
     "@storybook/addon-viewport": "^5.3.10",
     "@storybook/addons": "^5.3.10",
     "@storybook/react": "^5.3.10",
@@ -24,7 +23,6 @@
     "@types/react": "^16.9.16",
     "@types/react-dom": "^16.9.4",
     "@types/storybook__addon-info": "^5.2.1",
-    "@types/storybook__addon-knobs": "^5.2.1",
     "@types/styled-components": "^4.4.2",
     "babel-loader": "^8.0.6",
     "babel-preset-react-app": "^9.1.1",

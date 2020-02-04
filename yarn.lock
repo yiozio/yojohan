@@ -1126,7 +1126,7 @@
     react-lifecycles-compat "^3.0.4"
     util-deprecate "^1.0.2"
 
-"@storybook/addon-knobs@*", "@storybook/addon-knobs@^5.3.10":
+"@storybook/addon-knobs@^5.3.10":
   version "5.3.10"
   resolved "https://registry.yarnpkg.com/@storybook/addon-knobs/-/addon-knobs-5.3.10.tgz#3dbb6046f2e625a9f6ef22e1b5660c9976f4f842"
   integrity sha512-0mroTdXQItWOotswyo2e+P+Xmt4O+AyuVegRE3K5/2w/WMf2ku/YdRzH0uPgYS+y8PD0j3vDcTXt1UFnzjv8eg==
@@ -1165,25 +1165,6 @@
     prop-types "^15.7.2"
     qs "^6.6.0"
     ts-dedent "^1.1.0"
-
-"@storybook/addon-storysource@^5.3.10":
-  version "5.3.10"
-  resolved "https://registry.yarnpkg.com/@storybook/addon-storysource/-/addon-storysource-5.3.10.tgz#6781572d283abc81b9b7140c71b10195f64fa5e6"
-  integrity sha512-00jU7W7jMRrCaM/I6w6jPSXSJwU/WT4FYUuK/h+cl3CM8FOruzpmxtFzY1ZO3ZlI4Ka1KLm+NHI5eHZnsMVqJg==
-  dependencies:
-    "@storybook/addons" "5.3.10"
-    "@storybook/components" "5.3.10"
-    "@storybook/router" "5.3.10"
-    "@storybook/source-loader" "5.3.10"
-    "@storybook/theming" "5.3.10"
-    core-js "^3.0.1"
-    estraverse "^4.2.0"
-    loader-utils "^1.2.3"
-    prettier "^1.16.4"
-    prop-types "^15.7.2"
-    react-syntax-highlighter "^11.0.2"
-    regenerator-runtime "^0.13.3"
-    util-deprecate "^1.0.2"
 
 "@storybook/addon-viewport@^5.3.10":
   version "5.3.10"
@@ -1463,22 +1444,6 @@
     qs "^6.6.0"
     util-deprecate "^1.0.2"
 
-"@storybook/source-loader@5.3.10":
-  version "5.3.10"
-  resolved "https://registry.yarnpkg.com/@storybook/source-loader/-/source-loader-5.3.10.tgz#2700a52529b6a1bd6694d2eaa7fa6f6e29a510b7"
-  integrity sha512-4YdJnJKECknJ+tj3mpQgqripw5O1tRwRJL+uaOSz4Zrh/z2+ivEM8mWfxPSCbgHRvKfBA6fscKdZbyzeirenmw==
-  dependencies:
-    "@storybook/addons" "5.3.10"
-    "@storybook/client-logger" "5.3.10"
-    "@storybook/csf" "0.0.1"
-    core-js "^3.0.1"
-    estraverse "^4.2.0"
-    global "^4.3.2"
-    loader-utils "^1.2.3"
-    prettier "^1.16.4"
-    prop-types "^15.7.2"
-    regenerator-runtime "^0.13.3"
-
 "@storybook/theming@5.3.10":
   version "5.3.10"
   resolved "https://registry.yarnpkg.com/@storybook/theming/-/theming-5.3.10.tgz#6f53df9684d998ce3dfdb22babfaeb667b7f250d"
@@ -1747,13 +1712,6 @@
     "@storybook/addons" "^5.2.0"
     "@storybook/react" "^5.2.0"
     "@types/react" "*"
-
-"@types/storybook__addon-knobs@^5.2.1":
-  version "5.2.1"
-  resolved "https://registry.yarnpkg.com/@types/storybook__addon-knobs/-/storybook__addon-knobs-5.2.1.tgz#f7d4354c9e2a38d095af745a6198e6ff13a36710"
-  integrity sha512-fKK8cRxrfZ59wjso4NHpDd+BpG66HClpMEyjXeMz2XCtxRJhSZmvs/g/tBYYj4TZ+EhpATOnPnxwKn7aXMVsQg==
-  dependencies:
-    "@storybook/addon-knobs" "*"
 
 "@types/styled-components@^4.4.2":
   version "4.4.2"
@@ -7352,7 +7310,7 @@ prepend-http@^1.0.0:
   resolved "https://registry.yarnpkg.com/prepend-http/-/prepend-http-1.0.4.tgz#d4f4562b0ce3696e41ac52d0e002e57a635dc6dc"
   integrity sha1-1PRWKwzjaW5BrFLQ4ALlemNdxtw=
 
-prettier@^1.16.4, prettier@^1.19.1:
+prettier@^1.19.1:
   version "1.19.1"
   resolved "https://registry.yarnpkg.com/prettier/-/prettier-1.19.1.tgz#f7d7f5ff8a9cd872a7be4ca142095956a60797cb"
   integrity sha512-s7PoyDv/II1ObgQunCbB9PdLmUcBZcnWOcxDh7O0N/UwDEsHyqkW+Qh28jW+mVuCdx7gLB0BotYI1Y6uI9iyew==
