@@ -10,7 +10,9 @@ type DOMProps = Props & {
   className?: string;
 };
 
-const DOM = (props: DOMProps) => <div {...props} />;
+const DOM = ({ className, onClick, children }: DOMProps) => (
+  <div {...{ className, onClick, children }} />
+);
 
 const Styled = styled(DOM)(
   {
