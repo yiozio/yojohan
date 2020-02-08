@@ -6,7 +6,7 @@ import FunitureEdit from './FunitureEdit';
 import FunitureList from './FunitureList';
 import Buttons, { className as buttonsClass } from './Buttons';
 import { FunitureAttrs, funitureColors } from '../defs';
-import { funitures, save, selectedIndex } from '../stores/funitures';
+import { funitures, save, selectedIndex, tatamiSize } from '../stores/funitures';
 
 type DOMProps = {
   className?: string;
@@ -114,8 +114,8 @@ function Menu() {
           item || {
             name: 'テーブル',
             color: funitureColors[funitures.length % funitureColors.length],
-            x: 0,
-            y: 0,
+            x: (tatamiSize.get() * 1.5) / 2,
+            y: (tatamiSize.get() * 1.5) / 2,
             width: 155,
             height: 65,
             rotateDeg: 0

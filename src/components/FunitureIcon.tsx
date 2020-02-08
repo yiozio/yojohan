@@ -21,7 +21,7 @@ type DOMProps = {
 const DOM = (p: DOMProps) => (
   <svg
     className={p.className}
-    viewBox={`0 0 ${p.width} ${p.height}`}
+    viewBox={`${-p.width / 2} ${-p.height / 2} ${p.width} ${p.height}`}
     version="1.1"
     xmlns="http://www.w3.org/2000/svg"
     xmlnsXlink="http://www.w3.org/1999/xlink"
@@ -41,7 +41,8 @@ const Styled = styled(DOM)({
   background: '#FEE',
 
   '&:hover': { filter: 'brightness(0.9)' },
-  '& > *': { transform: 'none' }
+  '& > *': { transform: 'none' },
+  '& > g > circle': { display: 'none' }
 });
 
 export default observer(Menu);
