@@ -54,8 +54,8 @@ const Styled = styled(DOM)({
   }
 });
 
-export default observer(Menu);
-function Menu() {
+export default observer(FunitureList);
+function FunitureList() {
   return (
     <Styled
       items={funitures.map(a => a)}

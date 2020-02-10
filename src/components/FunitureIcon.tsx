@@ -45,8 +45,8 @@ const Styled = styled(DOM)({
   '& > g > circle': { display: 'none' }
 });
 
-export default observer(Menu);
-function Menu(p: Props) {
+export default observer(FunitureIcon);
+function FunitureIcon(p: Props) {
   const item = funitures[p.funitureIndex];
 
   return (

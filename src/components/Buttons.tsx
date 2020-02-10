@@ -22,6 +22,6 @@ const Styled = styled(DOM)({
 
 export const className = Styled;
 
-export default function Button(p: Props) {
+export default function Buttons(p: Props) {
   return <Styled {...p} />;
 }
