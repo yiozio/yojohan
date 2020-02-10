@@ -4,13 +4,13 @@ import { observer } from 'mobx-react';
 import Tatami from './Tatami';
 import TatamiPattern from './TatamiPattern';
 import Funiture from './Funiture';
-import { FunitureAttrs } from '../defs';
-import { funitures, tatamiSize } from '../stores/funitures';
+import { funitures, tatamiSize, selectedIndex } from '../stores/funitures';
 
 type DOMProps = {
   className?: string;
   tatamiSize: number;
-  items: FunitureAttrs[];
+  children: JSX.Element[];
+  onMouseDown: () => void;
 };
 
 const DOM = (p: DOMProps) => (
@@ -20,6 +20,7 @@ const DOM = (p: DOMProps) => (
     version="1.1"
     xmlns="http://www.w3.org/2000/svg"
     xmlnsXlink="http://www.w3.org/1999/xlink"
+    onMouseDownCapture={p.onMouseDown}
   >
     <TatamiPattern />
     <Tatami x={0.5} y={0.5} type="Half" />
@@ -27,11 +28,7 @@ const DOM = (p: DOMProps) => (
     <Tatami x={1} y={0} type="Vert" />
     <Tatami x={0.5} y={1} type="Hori" />
     <Tatami x={0} y={0.5} type="Vert" />
-    <g>
-      {p.items.map((_, i) => (
-        <Funiture key={i} funitureIndex={i} draggable />
-      ))}
-    </g>
+    <g>{p.children}</g>
   </svg>
 );
 
@@ -55,5 +52,11 @@ const Styled = styled(DOM)({
 
 export default observer(Preview);
 function Preview() {
-  return <Styled tatamiSize={tatamiSize.get()} items={funitures.map(a => a)} />;
+  return (
+    <Styled tatamiSize={tatamiSize.get()} onMouseDown={() => selectedIndex.set(undefined)}>
+      {funitures.map((f, i) => (
+        <Funiture key={i} funitureIndex={i} draggable />
+      ))}
+    </Styled>
+  );
 }

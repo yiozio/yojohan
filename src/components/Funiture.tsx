@@ -2,7 +2,7 @@ import * as React from 'react';
 import styled from 'styled-components';
 import { observer } from 'mobx-react';
 import { FunitureAttrs } from '../defs';
-import { funitures, save, tatamiSize } from '../stores/funitures';
+import { funitures, save, tatamiSize, selectedIndex } from '../stores/funitures';
 import * as matrix from '../defs/matrix';
 
 type Props = {
@@ -33,7 +33,21 @@ const DOM = ({
       .toArray(matrix.transform(matrix.translate(x, y), matrix.rotate(rotateDeg)))
       .join(',')})`}
   >
-    <g onMouseDownCapture={dragStart} onTouchStartCapture={dragStart}>
+    {rotateStart ? (
+      <circle
+        cx="0"
+        cy={height / 2 + 5}
+        r={3}
+        fill={color}
+        strokeWidth="1"
+        stroke="#FFF"
+        onMouseDown={rotateStart}
+        onTouchStart={rotateStart}
+      />
+    ) : (
+      undefined
+    )}
+    <g onMouseDown={dragStart} onTouchStart={dragStart}>
       <rect
         fill={color}
         x={-width / 2 + 0.5}
@@ -47,20 +61,18 @@ const DOM = ({
         {name}
       </text>
     </g>
-    <circle
-      cx="0"
-      cy={height / 2 + 5}
-      r={3}
-      fill={color}
-      strokeWidth="1"
-      stroke="#FFF"
-      onMouseDown={rotateStart}
-      onTouchStart={rotateStart}
-    />
   </g>
 );
 
-const Styled = styled(DOM)({});
+const Styled = styled(DOM)({
+  '& > circle + g > rect': {
+    strokeDasharray: '3 1',
+    animation: `selected 0.5s linear infinite`
+  },
+  '@keyframes selected': {
+    to: { strokeDashoffset: 4 }
+  }
+});
 
 export const base = Styled;
 
@@ -78,6 +90,7 @@ function Funiture({ funitureIndex, draggable }: Props) {
                 e,
                 tatamiSize.get(),
                 (svgBase, rate) => {
+                  selectedIndex.set(funitureIndex);
                   const { clientX: startX, clientY: startY } = getPos(e.nativeEvent);
 
                   return (e: MouseEvent | TouchEvent) => {
@@ -94,12 +107,13 @@ function Funiture({ funitureIndex, draggable }: Props) {
           : undefined
       }
       rotateStart={
-        draggable
+        draggable && selectedIndex.get() === funitureIndex
           ? e =>
               dragStart(
                 e,
                 tatamiSize.get(),
                 (svgBase, rate) => {
+                  selectedIndex.set(funitureIndex);
                   const centerX = svgBase.left + item.x * rate;
                   const centerY = svgBase.top + item.y * rate;
 

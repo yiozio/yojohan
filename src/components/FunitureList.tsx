@@ -2,28 +2,16 @@ import * as React from 'react';
 import { observer } from 'mobx-react';
 import styled from 'styled-components';
 import FunitureIcon from './FunitureIcon';
-import { FunitureAttrs } from '../defs';
-import { funitures, selectedIndex } from '../stores/funitures';
+import { funitures } from '../stores/funitures';
 
 type DOMProps = {
   className?: string;
-  items: FunitureAttrs[];
-  index?: number;
-  setIndex: (index?: number) => void;
+  children: JSX.Element[];
 };
 
 const DOM = (p: DOMProps) => (
   <div className={p.className}>
-    <div>
-      {p.items.map((item, i) => (
-        <FunitureIcon
-          key={i}
-          funitureIndex={i}
-          isSelected={p.index === i}
-          select={() => p.setIndex(p.index === i ? undefined : i)}
-        />
-      ))}
-    </div>
+    <div>{p.children}</div>
   </div>
 );
 
@@ -57,10 +45,10 @@ const Styled = styled(DOM)({
 export default observer(FunitureList);
 function FunitureList() {
   return (
-    <Styled
-      items={funitures.map(a => a)}
-      index={selectedIndex.get()}
-      setIndex={index => selectedIndex.set(index)}
-    />
+    <Styled>
+      {funitures.map((f, i) => (
+        <FunitureIcon key={i} funitureIndex={i} />
+      ))}
+    </Styled>
   );
 }

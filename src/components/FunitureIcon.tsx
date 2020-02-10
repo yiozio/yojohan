@@ -2,12 +2,10 @@ import * as React from 'react';
 import { observer } from 'mobx-react';
 import styled from 'styled-components';
 import Funiture from './Funiture';
-import { funitures } from '../stores/funitures';
+import { funitures, selectedIndex } from '../stores/funitures';
 
 type Props = {
   funitureIndex: number;
-  isSelected: boolean;
-  select: () => void;
 };
 type DOMProps = {
   className?: string;
@@ -41,8 +39,7 @@ const Styled = styled(DOM)({
   background: '#FEE',
 
   '&:hover': { filter: 'brightness(0.9)' },
-  '& > *': { transform: 'none' },
-  '& > g > circle': { display: 'none' }
+  '& > *': { transform: 'none' }
 });
 
 export default observer(FunitureIcon);
@@ -54,8 +51,10 @@ function FunitureIcon(p: Props) {
       index={p.funitureIndex}
       width={item.width}
       height={item.height}
-      isSelected={p.isSelected}
-      select={p.select}
+      isSelected={selectedIndex.get() === p.funitureIndex}
+      select={() =>
+        selectedIndex.set(selectedIndex.get() === undefined ? p.funitureIndex : undefined)
+      }
     />
   );
 }
