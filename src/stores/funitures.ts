@@ -6,7 +6,7 @@ export const tatamiSize = observable.box(88 * 2);
 
 export const selectedIndex = observable.box<number | undefined>();
 
-const funituresJson = (location.search.match(/(?<=json=)[^&]*/) || [])[0];
+const funituresJson = (location.search.match(/(?:json=)([^&]*)/) || [])[1];
 export const funitures = observable<FunitureAttrs>(
   funituresJson !== undefined ? JSON.parse(decodeURIComponent(funituresJson)) : []
 );
@@ -17,8 +17,8 @@ export const save = () => {
   const newSearch =
     oldSearch.length === 0
       ? `?json=${json}`
-      : oldSearch.match(/json=/)
-      ? oldSearch.replace(/(?<=json=)[^&]*/, json)
+      : oldSearch.match(/(^\?|\&)json=/)
+      ? oldSearch.replace(/(^\?|\&)json=[^&]*/, '$1json=' + json)
       : oldSearch + `&json=${json}`;
   window.history.pushState(null, '', './' + newSearch);
 };
