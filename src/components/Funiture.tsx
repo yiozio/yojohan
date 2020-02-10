@@ -74,13 +74,21 @@ function Funiture({ funitureIndex, draggable }: Props) {
       dragStart={
         draggable
           ? e =>
-              moveStart(
+              dragStart(
                 e,
                 tatamiSize.get(),
-                item.x,
-                item.y,
-                x => (item.x = x),
-                y => (item.y = y),
+                (svgBase, rate) => {
+                  const { clientX: startX, clientY: startY } = getPos(e.nativeEvent);
+
+                  return (e: MouseEvent | TouchEvent) => {
+                    const { clientX, clientY } = getPos(e);
+                    funitures[funitureIndex] = {
+                      ...item,
+                      x: item.x - Math.round((startX - clientX) / rate),
+                      y: item.y - Math.round((startY - clientY) / rate)
+                    };
+                  };
+                },
                 save
               )
           : undefined
@@ -88,14 +96,21 @@ function Funiture({ funitureIndex, draggable }: Props) {
       rotateStart={
         draggable
           ? e =>
-              rotateStart(
+              dragStart(
                 e,
                 tatamiSize.get(),
-                item.x,
-                item.y,
-                item.width,
-                item.height,
-                r => (item.rotateDeg = r),
+                (svgBase, rate) => {
+                  const centerX = svgBase.left + item.x * rate;
+                  const centerY = svgBase.top + item.y * rate;
+
+                  return (e: MouseEvent | TouchEvent) => {
+                    const { clientX, clientY } = getPos(e);
+                    const vectorX = clientX - centerX;
+                    const vectorY = clientY - centerY;
+                    const degree = (Math.atan2(vectorY, vectorX) * 180) / Math.PI - 90;
+                    funitures[funitureIndex].rotateDeg = Math.round(degree);
+                  };
+                },
                 save
               )
           : undefined
@@ -104,104 +119,36 @@ function Funiture({ funitureIndex, draggable }: Props) {
   );
 }
 
-function moveStart(
+function dragStart(
   e: React.TouchEvent | React.MouseEvent,
   tatamiSize: number,
-  x: number,
-  y: number,
-  setX: (x: number) => void,
-  setY: (y: number) => void,
-  save?: () => void
-) {
-  const element = e.currentTarget as Element;
-  const svgBase = element.parentElement?.parentElement?.parentElement as Element;
-
-  const getPos = (e: MouseEvent | TouchEvent) => {
-    const { clientX, clientY } = (e as TouchEvent).touches
-      ? (e as TouchEvent).touches[0]
-      : (e as MouseEvent);
-    return { clientX, clientY };
-  };
-
-  // ブラウザ上のサイズ(px)とSVGのサイズの比率
-  const rate = svgBase.clientWidth / (tatamiSize * 1.5);
-
-  const { clientX: startX, clientY: startY } = getPos(e.nativeEvent);
-
-  function move(e: MouseEvent | TouchEvent) {
-    const { clientX, clientY } = getPos(e);
-    setX(x - Math.round((startX - clientX) / rate));
-    setY(y - Math.round((startY - clientY) / rate));
-  }
-
-  if ((e as React.TouchEvent).touches) {
-    element.addEventListener('touchmove', move, { passive: true });
-    const end = () => {
-      element.removeEventListener('touchmove', move);
-      element.removeEventListener('touchend', end);
-      save && save();
-    };
-    element.addEventListener('touchend', end, { passive: true });
-  } else {
-    document.addEventListener('mousemove', move, { passive: true });
-    const end = () => {
-      document.removeEventListener('mousemove', move);
-      document.removeEventListener('mouseup', end);
-      save && save();
-    };
-    document.addEventListener('mouseup', end, { passive: true });
-  }
-}
-function rotateStart(
-  e: React.TouchEvent | React.MouseEvent,
-  tatamiSize: number,
-  x: number,
-  y: number,
-  width: number,
-  height: number,
-  setRotate: (rotate: number) => void,
-  save?: () => void
+  getDragHandler: (svgBase: DOMRect, rate: number) => (e: MouseEvent | TouchEvent) => void,
+  save: () => void
 ) {
   const element = e.currentTarget;
   const svg = element.parentElement?.parentElement?.parentElement as Element;
   const svgBase = svg.getBoundingClientRect();
 
-  const getPos = (e: MouseEvent | TouchEvent) => {
-    const { clientX, clientY } = (e as TouchEvent).touches
-      ? (e as TouchEvent).touches[0]
-      : (e as MouseEvent);
-    return { clientX, clientY };
-  };
-
   // ブラウザ上のサイズ(px)とSVGのサイズの比率
   const rate = svgBase.width / (tatamiSize * 1.5);
 
-  const centerX = svgBase.left + x * rate;
-  const centerY = svgBase.top + y * rate;
+  const drag = getDragHandler(svgBase, rate);
 
-  function move(e: MouseEvent | TouchEvent) {
-    const { clientX, clientY } = getPos(e);
-    const vectorX = clientX - centerX;
-    const vectorY = clientY - centerY;
-    const degree = (Math.atan2(vectorY, vectorX) * 180) / Math.PI - 90;
-    setRotate(Math.round(degree));
-  }
+  const [target, moveEvent, endEvent] = (e as React.TouchEvent).touches
+    ? [element, 'touchmove', 'touchend']
+    : [document, 'mousemove', 'mouseup'];
 
-  if ((e as React.TouchEvent).touches) {
-    element.addEventListener('touchmove', move, { passive: true });
-    const end = () => {
-      element.removeEventListener('touchmove', move);
-      element.removeEventListener('touchend', end);
-      save && save();
-    };
-    element.addEventListener('touchend', end, { passive: true });
-  } else {
-    document.addEventListener('mousemove', move, { passive: true });
-    const end = () => {
-      document.removeEventListener('mousemove', move);
-      document.removeEventListener('mouseup', end);
-      save && save();
-    };
-    document.addEventListener('mouseup', end, { passive: true });
-  }
+  target.addEventListener(moveEvent, drag, { passive: true });
+  const end = () => {
+    target.removeEventListener(moveEvent, drag);
+    target.removeEventListener(endEvent, end);
+    save();
+  };
+  target.addEventListener(endEvent, end, { passive: true });
+}
+function getPos(e: MouseEvent | TouchEvent) {
+  const { clientX, clientY } = (e as TouchEvent).touches
+    ? (e as TouchEvent).touches[0]
+    : (e as MouseEvent);
+  return { clientX, clientY };
 }
