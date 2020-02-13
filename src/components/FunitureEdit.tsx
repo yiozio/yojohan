@@ -9,6 +9,7 @@ import { funitures, selection, tatamiSize, save } from '../stores/funitures';
 
 type DOMProps = {
   className?: string;
+  zeroItem?: boolean;
   addItem: () => void;
   selectedActions?: {
     editText: () => void;
@@ -30,10 +31,10 @@ type DOMProps = {
   };
 };
 
-const DOM = ({ className, addItem, selectedActions }: DOMProps) => (
+const DOM = ({ className, zeroItem, addItem, selectedActions }: DOMProps) => (
   <div className={className}>
     <Buttons position="rightbottom">
-      <Button onClick={addItem}>
+      <Button onClick={addItem} appeal={zeroItem}>
         <i className="fas fa-2x fa-plus" />
       </Button>
     </Buttons>
@@ -127,6 +128,7 @@ function FunitureEdit() {
   const index = selection.get()?.index;
   return (
     <Styled
+      zeroItem={funitures.length === 0}
       addItem={() => {
         funitures.push({
           name: 'テーブル',

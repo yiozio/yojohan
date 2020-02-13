@@ -5,6 +5,7 @@ type Props = {
   onClick: () => void;
   children?: string | JSX.Element;
   half?: 'top' | 'bottom';
+  appeal?: boolean;
   style?: React.HTMLAttributes<HTMLDivElement>['style'];
 };
 type DOMProps = Props & {
@@ -34,6 +35,14 @@ const Styled = styled(DOM)(
       filter: 'brightness(0.9)',
       boxShadow: 'none',
       transform: 'translateY(1px)'
+    },
+    '@keyframes appeal': {
+      '78%': { transform: 'rotate(0deg)' },
+      '80%': { transform: 'rotate(30deg)' },
+      '84%': { transform: 'rotate(-30deg)' },
+      '88%': { transform: 'rotate(25deg)' },
+      '92%': { transform: 'rotate(-25deg)' },
+      '96%': { transform: 'rotate(20deg)' }
     }
   },
   p =>
@@ -42,6 +51,12 @@ const Styled = styled(DOM)(
           height: '20px',
           lineHeight: '20px',
           borderRadius: p.half === 'top' ? '20px 20px 0 0' : '0 0 20px 20px'
+        }
+      : undefined,
+  p =>
+    p.appeal
+      ? {
+          '& > i': { animation: `appeal 4s linear infinite` }
         }
       : undefined
 );
