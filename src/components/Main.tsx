@@ -190,6 +190,7 @@ function Main() {
                 addValue: (w, h) => {
                   funitures[index].width += w;
                   funitures[index].height += h;
+                  save();
                 }
               },
               editColor: {
@@ -203,7 +204,10 @@ function Main() {
                 },
                 values: funitureColors,
                 value: funitures[index].color,
-                setValue: c => (funitures[index].color = c)
+                setValue: c => {
+                  funitures[index].color = c;
+                  save();
+                }
               },
               copy: () => {
                 funitures.push({ ...funitures[index] });
