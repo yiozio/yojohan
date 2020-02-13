@@ -14,33 +14,48 @@ type DOMProps = Props;
 const DOM = ({ className, menu, onClick, children }: DOMProps) => (
   <div className={className}>
     <Button {...{ onClick, children }} />
-    <div>
-      {menu?.map((elements, i) => (
-        <div key={i}>{elements}</div>
-      ))}
-    </div>
+    {menu === undefined ? (
+      undefined
+    ) : (
+      <div>
+        {menu.map((elements, i) => (
+          <div key={i}>{elements}</div>
+        ))}
+      </div>
+    )}
   </div>
 );
 
-const Styled = styled(DOM)({
-  position: 'relative',
-  textShadow: '1px 1px 0 #FFF, -1px 1px 0 #FFF, 1px -1px 0 #FFF, -1px -1px 0 #FFF;',
-
-  '& > div:last-child': {
-    position: 'absolute',
-    left: '40px',
-    top: '20px',
-    transform: 'translateY(-50%)',
-    display: 'flex',
-    flexFlow: 'row nowrap',
-    alignItems: 'center',
-
-    '& > div > div': {
-      margin: '5px',
-      textAlign: 'center'
+const Styled = styled(DOM)(
+  {
+    position: 'relative',
+    textShadow: '1px 1px 0 #FFF, -1px 1px 0 #FFF, 1px -1px 0 #FFF, -1px -1px 0 #FFF;',
+    '@keyframes fadein': {
+      from: { opacity: 0 },
+      to: { opacity: 1 }
     }
-  }
-});
+  },
+  p =>
+    p.menu
+      ? {
+          '& > div:last-child': {
+            position: 'absolute',
+            left: '40px',
+            top: '20px',
+            transform: 'translateY(-50%)',
+            display: 'flex',
+            flexFlow: 'row nowrap',
+            alignItems: 'center',
+            animation: 'fadein .3s',
+
+            '& > div > div': {
+              margin: '5px',
+              textAlign: 'center'
+            }
+          }
+        }
+      : undefined
+);
 
 export const className = Styled;
 
