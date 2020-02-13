@@ -3,22 +3,27 @@ import styled from 'styled-components';
 
 type Props = {
   children?: JSX.Element | JSX.Element[];
+  position: 'lefttop' | 'leftbottom' | 'righttop' | 'rightbottom';
 };
 type DOMProps = Props & {
   className?: string;
 };
 
-const DOM = (props: DOMProps) => <div {...props} />;
+const DOM = ({ className, children }: DOMProps) => <div {...{ className, children }} />;
 
-const Styled = styled(DOM)({
-  display: 'flex',
-  flexFlow: 'row nowrap',
+const Styled = styled(DOM)(
+  {
+    position: 'absolute',
 
-  '& > *': {
-    flex: '1 1 auto',
-    margin: '0 5px'
-  }
-});
+    '& > *': {
+      margin: '10px'
+    }
+  },
+  p => ({
+    ...(p.position[0] === 'l' ? { left: '0' } : { right: '0' }),
+    ...(p.position[p.position.length - 1] === 'p' ? { top: '0' } : { bottom: '0' })
+  })
+);
 
 export const className = Styled;
 

@@ -4,7 +4,7 @@ import { observer } from 'mobx-react';
 import Tatami from './Tatami';
 import TatamiPattern from './TatamiPattern';
 import Funiture from './Funiture';
-import { funitures, tatamiSize, selectedIndex } from '../stores/funitures';
+import { funitures, tatamiSize, selection, dragging } from '../stores/funitures';
 
 type DOMProps = {
   className?: string;
@@ -14,48 +14,50 @@ type DOMProps = {
 };
 
 const DOM = (p: DOMProps) => (
-  <svg
-    className={p.className}
-    viewBox={`0 0 ${p.tatamiSize * 1.5} ${p.tatamiSize * 1.5}`}
-    version="1.1"
-    xmlns="http://www.w3.org/2000/svg"
-    xmlnsXlink="http://www.w3.org/1999/xlink"
-    onMouseDownCapture={p.onMouseDown}
-  >
-    <TatamiPattern />
-    <Tatami x={0.5} y={0.5} type="Half" />
-    <Tatami x={0} y={0} type="Hori" />
-    <Tatami x={1} y={0} type="Vert" />
-    <Tatami x={0.5} y={1} type="Hori" />
-    <Tatami x={0} y={0.5} type="Vert" />
-    <g>{p.children}</g>
-  </svg>
+  <div className={p.className}>
+    <svg
+      viewBox={`0 0 ${p.tatamiSize * 1.5} ${p.tatamiSize * 1.5}`}
+      version="1.1"
+      xmlns="http://www.w3.org/2000/svg"
+      xmlnsXlink="http://www.w3.org/1999/xlink"
+      onMouseDown={p.onMouseDown}
+    >
+      <rect x={0} y={0} width={p.tatamiSize * 1.5} height={p.tatamiSize * 1.5} fill="#90A500" />
+      <TatamiPattern />
+      <Tatami x={0.5} y={0.5} type="Half" />
+      <Tatami x={0} y={0} type="Hori" />
+      <Tatami x={1} y={0} type="Vert" />
+      <Tatami x={0.5} y={1} type="Hori" />
+      <Tatami x={0} y={0.5} type="Vert" />
+      <g>{p.children}</g>
+    </svg>
+  </div>
 );
 
 const Styled = styled(DOM)({
-  position: 'absolute',
-  left: 0,
-  top: '35px',
-  width: 'calc(100vmin - 100px)',
-  maxWidth: 'calc(100vw - 300px)',
-  height: 'calc(100vmin - 100px)',
-  maxHeight: 'calc(100vw - 300px)',
-  background: '#90A500',
+  width: '100%',
+  height: '100%',
+  display: 'flex',
+  justifyContent: 'center',
+  alignItems: 'center',
+  background:
+    'url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAoAAAAKCAYAAACNMs+9AAAAJUlEQVQoU2N89+7dfwYC4P379wyMowpxhRJpwXP37l2CAQ6yCQB4tj7nxBC6EgAAAABJRU5ErkJggg==) repeat',
 
-  '@media (orientation: portrait)': {
-    width: '100vw',
-    maxWidth: '100vw',
-    height: '100vw',
-    maxHeight: '100vw'
+  '& > svg': {
+    width: '100vmin',
+    height: '100vmin'
   }
 });
 
 export default observer(Preview);
 function Preview() {
   return (
-    <Styled tatamiSize={tatamiSize.get()} onMouseDown={() => selectedIndex.set(undefined)}>
+    <Styled
+      tatamiSize={tatamiSize.get()}
+      onMouseDown={() => (dragging ? undefined : selection.set(undefined))}
+    >
       {funitures.map((f, i) => (
-        <Funiture key={i} funitureIndex={i} draggable />
+        <Funiture key={i} funitureIndex={i} />
       ))}
     </Styled>
   );
