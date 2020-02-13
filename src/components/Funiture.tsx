@@ -74,8 +74,8 @@ const DOM = ({
     {rotateStart ? (
       <circle
         cx="0"
-        cy={height / 2 + 5}
-        r={3}
+        cy={height / 2 + 8}
+        r={5}
         fill={color}
         strokeWidth="1"
         stroke="#FFF"
