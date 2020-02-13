@@ -10,7 +10,7 @@ type Props = {
 };
 type DOMProps = FunitureAttrs & {
   className?: string;
-  forwardedRef: React.RefObject<SVGGElement>;
+  selected: boolean;
   dragStart: (e: React.MouseEvent | React.TouchEvent) => void;
   rotateStart?: (e: React.MouseEvent | React.TouchEvent) => void;
   textEditStart: () => void;
@@ -20,7 +20,6 @@ type DOMProps = FunitureAttrs & {
 
 const DOM = ({
   className,
-  forwardedRef,
   color,
   width,
   x,
@@ -36,25 +35,10 @@ const DOM = ({
 }: DOMProps) => (
   <g
     className={className}
-    ref={forwardedRef}
     transform={`matrix(${matrix
       .toArray(matrix.transform(matrix.translate(x, y), matrix.rotate(rotateDeg)))
       .join(',')})`}
   >
-    {rotateStart ? (
-      <circle
-        cx="0"
-        cy={height / 2 + 5}
-        r={3}
-        fill={color}
-        strokeWidth="1"
-        stroke="#FFF"
-        onMouseDown={rotateStart}
-        onTouchStart={rotateStart}
-      />
-    ) : (
-      undefined
-    )}
     <g onMouseDown={dragStart} onTouchStart={dragStart} onDoubleClick={textEditStart}>
       <rect
         fill={color}
@@ -87,28 +71,42 @@ const DOM = ({
         </text>
       )}
     </g>
+    {rotateStart ? (
+      <circle
+        cx="0"
+        cy={height / 2 + 5}
+        r={3}
+        fill={color}
+        strokeWidth="1"
+        stroke="#FFF"
+        onMouseDown={rotateStart}
+        onTouchStart={rotateStart}
+      />
+    ) : (
+      undefined
+    )}
   </g>
 );
 
 const Styled = styled(DOM)(
   {
     '& input': {
-      color: '#FFF',
-      background: '#00000000',
+      color: '#000',
+      background: '#FFF',
       width: '100%',
       height: '100%',
       border: 'none',
       margin: '0',
       padding: '0',
       textAlign: 'center',
-      userSelect: 'none'
+      userSelect: 'text'
     },
     '@keyframes selected': {
       to: { strokeDashoffset: 4 }
     }
   },
   p =>
-    p.rotateStart
+    p.selected
       ? {
           '& > g > rect': {
             strokeDasharray: '3 1',
@@ -116,7 +114,7 @@ const Styled = styled(DOM)(
           }
         }
       : undefined,
-  p => (p.onTextEdit ? { '& input': { userSelect: 'text' } } : undefined)
+  p => (p.onTextEdit ? { '& > g > rect': { stroke: '#000' } } : undefined)
 );
 
 export const base = Styled;
@@ -124,29 +122,14 @@ export const base = Styled;
 export default observer(Funiture);
 function Funiture({ funitureIndex }: Props) {
   const item = funitures[funitureIndex];
-  const select = selection.get();
-
-  const ref = React.createRef<SVGGElement>();
-
-  React.useEffect(() => {
-    if (!ref.current) return;
-    const input = ref.current.querySelector('input');
-    if (!input) return;
-
-    if (select?.edit === 'text') {
-      input.setSelectionRange(item.name.length, item.name.length);
-      input.focus();
-    } else {
-      input.blur();
-    }
-  }, [select]);
+  const selectionState = selection.get();
 
   return (
     <Styled
       {...item}
-      forwardedRef={ref}
+      selected={selectionState?.index === funitureIndex}
       dragStart={
-        select?.index === funitureIndex && select?.edit
+        selectionState?.index === funitureIndex && selectionState?.edit
           ? e => {
               setDragging(true);
               const [target, endEvent] = (e as React.TouchEvent).touches
@@ -179,7 +162,7 @@ function Funiture({ funitureIndex }: Props) {
               )
       }
       rotateStart={
-        select?.index === funitureIndex
+        selectionState?.index === funitureIndex && selectionState?.edit === undefined
           ? e =>
               dragStart(
                 e,
@@ -203,7 +186,7 @@ function Funiture({ funitureIndex }: Props) {
       }
       textEditStart={() => selection.set({ index: funitureIndex, edit: 'text' })}
       onTextEdit={
-        select?.index === funitureIndex && select?.edit === 'text'
+        selectionState?.index === funitureIndex && selectionState?.edit === 'text'
           ? e => {
               item.name = e.target.value || '';
               save();
@@ -211,7 +194,7 @@ function Funiture({ funitureIndex }: Props) {
           : undefined
       }
       textEditEnd={
-        select?.index === funitureIndex && select?.edit === 'text'
+        selectionState?.index === funitureIndex && selectionState?.edit === 'text'
           ? () => selection.set(undefined)
           : undefined
       }
