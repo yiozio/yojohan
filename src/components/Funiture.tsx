@@ -39,6 +39,11 @@ const DOM = ({
       .toArray(matrix.transform(matrix.translate(x, y), matrix.rotate(rotateDeg)))
       .join(',')})`}
   >
+    {rotateStart ? (
+      <circle cx="0" cy={height / 2 + 8} r={8} opacity={0} onTouchStart={rotateStart} />
+    ) : (
+      undefined
+    )}
     <g onMouseDown={dragStart} onTouchStart={dragStart} onDoubleClick={textEditStart}>
       <rect
         fill={color}
@@ -75,7 +80,7 @@ const DOM = ({
       <circle
         cx="0"
         cy={height / 2 + 8}
-        r={5}
+        r={4}
         fill={color}
         strokeWidth="1"
         stroke="#FFF"
