@@ -6,7 +6,7 @@ import Button from './Button';
 type Props = {
   className?: string;
   children?: string | JSX.Element;
-  menu?: JSX.Element[][];
+  menu?: JSX.Element[];
   onClick: () => void;
 };
 type DOMProps = Props;
@@ -18,8 +18,8 @@ const DOM = ({ className, menu, onClick, children }: DOMProps) => (
       undefined
     ) : (
       <div>
-        {menu.map((elements, i) => (
-          <div key={i}>{elements}</div>
+        {menu.map((element, i) => (
+          <div key={i}>{element}</div>
         ))}
       </div>
     )}

@@ -51,37 +51,37 @@ const DOM = ({ className, zeroItem, addItem, selectedActions }: DOMProps) => (
           menu={
             selectedActions.editSize.enable
               ? [
-                  [
+                  <>
                     <Button half="top" onClick={() => selectedActions.editSize.addValue(+10, 0)}>
                       +10
-                    </Button>,
+                    </Button>
                     <Button half="top" onClick={() => selectedActions.editSize.addValue(+1, 0)}>
                       +1
-                    </Button>,
-                    <div>{selectedActions.editSize.value.width + 'cm'}</div>,
+                    </Button>
+                    <div>{selectedActions.editSize.value.width + 'cm'}</div>
                     <Button half="bottom" onClick={() => selectedActions.editSize.addValue(-1, 0)}>
                       -1
-                    </Button>,
+                    </Button>
                     <Button half="bottom" onClick={() => selectedActions.editSize.addValue(-10, 0)}>
                       -10
                     </Button>
-                  ],
-                  [<div>×</div>],
-                  [
+                  </>,
+                  <div>×</div>,
+                  <>
                     <Button half="top" onClick={() => selectedActions.editSize.addValue(0, +10)}>
                       +10
-                    </Button>,
+                    </Button>
                     <Button half="top" onClick={() => selectedActions.editSize.addValue(0, +1)}>
                       +1
-                    </Button>,
-                    <div>{selectedActions.editSize.value.height + 'cm'}</div>,
+                    </Button>
+                    <div>{selectedActions.editSize.value.height + 'cm'}</div>
                     <Button half="bottom" onClick={() => selectedActions.editSize.addValue(0, -1)}>
                       -1
-                    </Button>,
+                    </Button>
                     <Button half="bottom" onClick={() => selectedActions.editSize.addValue(0, -10)}>
                       -10
                     </Button>
-                  ]
+                  </>
                 ]
               : undefined
           }
@@ -92,7 +92,7 @@ const DOM = ({ className, zeroItem, addItem, selectedActions }: DOMProps) => (
           onClick={selectedActions.editColor.toggle}
           menu={
             selectedActions.editColor.enable
-              ? selectedActions.editColor.values.map(c => [
+              ? selectedActions.editColor.values.map(c => (
                   <Button
                     onClick={() => selectedActions.editColor.setValue(c)}
                     style={{
@@ -100,7 +100,7 @@ const DOM = ({ className, zeroItem, addItem, selectedActions }: DOMProps) => (
                       border: `2px solid ${selectedActions.editColor.value === c ? '#AAA' : '#FFF'}`
                     }}
                   ></Button>
-                ])
+                ))
               : undefined
           }
         >
