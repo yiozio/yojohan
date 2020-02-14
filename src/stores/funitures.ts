@@ -5,7 +5,7 @@ import { FunitureAttrs } from '../defs';
 export const tatamiSize = observable.box(88 * 2);
 
 export const selection = observable.box<
-  { index: number; edit?: 'text' | 'size' | 'color' } | undefined
+  { index: number; edit?: 'text' | 'size' | 'color'; isNew?: boolean } | undefined
 >();
 
 const funituresJson = (location.search.match(/(?:json=)([^&]*)/) || [])[1];

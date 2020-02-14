@@ -10,7 +10,7 @@ type Props = {
 };
 type DOMProps = FunitureAttrs & {
   className?: string;
-  selected: boolean;
+  status?: 'select' | 'new';
   dragStart: (e: React.MouseEvent | React.TouchEvent) => void;
   rotateStart?: (e: React.MouseEvent | React.TouchEvent) => void;
   textEditStart: () => void;
@@ -95,31 +95,40 @@ const DOM = ({
 
 const Styled = styled(DOM)(
   {
-    '& input': {
-      color: '#000',
-      background: '#FFF',
-      width: '100%',
-      height: '100%',
-      border: 'none',
-      margin: '0',
-      padding: '0',
-      textAlign: 'center',
-      userSelect: 'text'
-    },
     '@keyframes selected': {
       to: { strokeDashoffset: 4 }
+    },
+    '@keyframes pop': {
+      from: { strokeWidth: 10, strokeDasharray: 'none' },
+      to: { strokeWidth: 1, strokeDasharray: 'none' }
     }
   },
   p =>
-    p.selected
+    p.status
       ? {
-          '& > g > rect': {
+          '& rect': {
             strokeDasharray: '3 1',
-            animation: `selected 0.5s linear infinite`
+            animation: `${p.status === 'new' ? 'pop 0.3s, ' : ''}selected 0.5s linear infinite`
           }
         }
       : undefined,
-  p => (p.onTextEdit ? { '& > g > rect': { stroke: '#000' } } : undefined)
+  p =>
+    p.onTextEdit
+      ? {
+          '& rect': { stroke: '#000' },
+          '& input': {
+            color: '#000',
+            background: '#FFF',
+            width: '100%',
+            height: '100%',
+            border: 'none',
+            margin: '0',
+            padding: '0',
+            textAlign: 'center',
+            userSelect: 'text'
+          }
+        }
+      : undefined
 );
 
 export const base = Styled;
@@ -132,7 +141,13 @@ function Funiture({ funitureIndex }: Props) {
   return (
     <Styled
       {...item}
-      selected={selectionState?.index === funitureIndex}
+      status={
+        selectionState?.index === funitureIndex
+          ? selectionState.isNew
+            ? 'new'
+            : 'select'
+          : undefined
+      }
       dragStart={
         selectionState?.index === funitureIndex && selectionState?.edit
           ? e => {

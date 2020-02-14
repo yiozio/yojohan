@@ -139,7 +139,7 @@ function FunitureEdit() {
           height: 65,
           rotateDeg: 0
         });
-        selection.set({ index: funitures.length - 1 });
+        selection.set({ index: funitures.length - 1, isNew: true });
         save();
       }}
       selectedActions={
@@ -190,7 +190,7 @@ function FunitureEdit() {
               },
               copy: () => {
                 funitures.push({ ...funitures[index] });
-                selection.set({ index: funitures.length - 1 });
+                selection.set({ index: funitures.length - 1, isNew: true });
                 save();
               },
               remove: () => {
