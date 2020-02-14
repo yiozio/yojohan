@@ -8,10 +8,12 @@ export const selection = observable.box<
   { index: number; edit?: 'text' | 'size' | 'color'; isNew?: boolean } | undefined
 >();
 
-const funituresJson = (location.search.match(/(?:json=)([^&]*)/) || [])[1];
-export const funitures = observable<FunitureAttrs>(
-  funituresJson !== undefined ? JSON.parse(decodeURIComponent(funituresJson)) : []
-);
+function getFunituresFromQuery(): FunitureAttrs[] {
+  const json = (location.search.match(/(?:json=)([^&]*)/) || [])[1];
+  return json !== undefined ? JSON.parse(decodeURIComponent(json)) : [];
+}
+
+export const funitures = observable<FunitureAttrs>(getFunituresFromQuery());
 
 export let dragging = false;
 export const setDragging = (onoff: boolean) => {
@@ -28,4 +30,8 @@ export const save = () => {
       ? oldSearch.replace(/(^\?|\&)json=[^&]*/, '$1json=' + json)
       : oldSearch + `&json=${json}`;
   window.history.pushState(null, '', './' + newSearch);
+};
+window.onpopstate = (e: PopStateEvent) => {
+  selection.set(undefined);
+  funitures.replace(getFunituresFromQuery());
 };
