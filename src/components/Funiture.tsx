@@ -178,7 +178,15 @@ function Funiture({ funitureIndex }: Props) {
                     };
                   };
                 },
-                save
+                () => {
+                  const item = funitures[funitureIndex];
+                  const max = tatamiSize.get() * 1.5;
+                  if (item.x < 0) item.x = 0;
+                  if (item.x > max) item.x = max;
+                  if (item.y < 0) item.y = 0;
+                  if (item.y > max) item.y = max;
+                  save();
+                }
               )
       }
       rotateStart={
