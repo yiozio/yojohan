@@ -1,0 +1,8 @@
+{
+  "name": "四畳半シミュレータ",
+  "background_color": "#FFEEEE",
+  "icons": [{"src": "favicon.png", "sizes": "512x512", "type": "image/png"}],
+  "display": "standalone",
+  "theme_color": "#FFEEEE",
+  "start_url": "./"
+}
