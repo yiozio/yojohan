@@ -4,7 +4,7 @@ const DEVELOPMENT = 'development';
 
 module.exports = (env, argv) => ({
     mode: argv.mode ? argv.mode : DEVELOPMENT,
-    entry: {yojohan: './src/index.tsx'},
+    entry: {yojohan: './src/index.tsx', worker: './src/worker.ts'},
     module: {
         rules: [{
             test: /\.tsx?$/,
